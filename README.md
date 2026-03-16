@@ -16,9 +16,8 @@ Windows-only eye-break reminder app based on the 20-20-20 rule.
 
 - `windows/20min20s`: main WPF app
 - `windows/Project1.UI`: shared UI library
-- `docs/20min2s-design.md`: design notes
 
-The `referrence/` directory is intentionally excluded from this repository. It was used only as an external reference during migration.
+The `referrence/` and `docs/` directories are intentionally excluded from this repository. `referrence/` was used as an external reference during migration, and `docs/` is kept only for local notes.
 
 ## Build
 

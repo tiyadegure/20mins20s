@@ -44,6 +44,7 @@ namespace ProjectEye.Core.Net
         }
         public class GithubAssetsModel
         {
+            public string name { get; set; }
             public string browser_download_url { get; set; }
         }
         private string githubUrl;
@@ -95,7 +96,14 @@ namespace ProjectEye.Core.Net
                     Info.IsPre = data.prerelease;
                     Info.Title = data.name;
                     Info.Version = data.tag_name;
-                    Info.DownloadUrl = data.assets[0].browser_download_url;
+                    var asset = data.assets?.Find(m =>
+                        !string.IsNullOrEmpty(m.name) &&
+                        m.name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase));
+                    if (asset == null && data.assets != null && data.assets.Count > 0)
+                    {
+                        asset = data.assets[0];
+                    }
+                    Info.DownloadUrl = asset?.browser_download_url;
                     Info.HtmlUrl = data.html_url;
                     RequestCompleteEvent?.Invoke(this, Info);
                 }
