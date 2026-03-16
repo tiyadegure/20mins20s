@@ -682,15 +682,15 @@
                         </TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0,10,0,0">
                         <Run Text="{DynamicResource Lang_Help}"/> <Hyperlink  Command="{Binding openurlCommand}"
-                                      CommandParameter="https://littlepanda.gitbook.io/project-eye/">ProjectEye 文档（参考）</Hyperlink>
+                                      CommandParameter="https://github.com/zhangjoe120246-bot/20mins20s#readme">项目文档</Hyperlink>
                         </TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0,10,0,0">
                          <Run Text="{DynamicResource Lang_Source}"/> <Hyperlink Command="{Binding openurlCommand}"
-                                      CommandParameter="https://github.com/Planshit/ProjectEye">ProjectEye 仓库（参考）</Hyperlink>
+                                      CommandParameter="https://github.com/zhangjoe120246-bot/20mins20s">20min20s 仓库</Hyperlink>
                         </TextBlock>
                         <TextBlock TextWrapping="Wrap" Margin="0,10,0,0">
                          <Run Text="{DynamicResource Lang_Feedback}"/> <Hyperlink  Command="{Binding openurlCommand}"
-                                      CommandParameter="https://github.com/Planshit/ProjectEye/issues">ProjectEye Issues（参考）</Hyperlink>
+                                      CommandParameter="https://github.com/zhangjoe120246-bot/20mins20s/issues">20min20s Issues</Hyperlink>
                         </TextBlock>
                         <!--<TextBlock TextWrapping="Wrap" Margin="0,10,0,0">
                          <Run Text="{DynamicResource Lang_Developers}"/> <Hyperlink  Command="{Binding openurlCommand}"

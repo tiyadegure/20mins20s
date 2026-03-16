@@ -38,7 +38,7 @@ namespace ProjectEye.Models
         {
             get
             {
-                return "https://github.com/Planshit/ProjectEye/releases/tag/" + Version;
+                return "https://github.com/zhangjoe120246-bot/20mins20s/releases/tag/" + Version;
             }
 
         }

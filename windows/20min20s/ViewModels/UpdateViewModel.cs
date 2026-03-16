@@ -60,7 +60,7 @@ namespace ProjectEye.ViewModels
 #if DEBUG
             version = "1.0.3";
 #endif
-            githubUrl = "https://api.github.com/repos/planshit/projecteye/releases/latest";
+            githubUrl = "https://api.github.com/repos/zhangjoe120246-bot/20mins20s/releases/latest";
             outPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
 
             openurlCommand = new Command(new Action<object>(openurlCommand_action));
