@@ -1,0 +1,10 @@
+/referrence/
+
+/windows/20min20s/bin/
+/windows/20min20s/obj/
+/windows/Project1.UI/bin/
+/windows/Project1.UI/obj/
+
+/windows/*.log
+*.user
+*.suo
