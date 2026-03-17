@@ -29,6 +29,7 @@ namespace ProjectEye.Core.Service
         private TimeSpan workRemaining;
         private DateTime? deferredReminderReadyAt;
         private bool isBreakDeferred;
+        private DispatcherTimer deferred_break_timer;
         /// <summary>
         /// 离开检测计时器
         /// </summary>
@@ -156,6 +157,10 @@ namespace ProjectEye.Core.Service
             busy_timer = new DispatcherTimer();
             busy_timer.Tick += new EventHandler(busy_timer_Tick);
             busy_timer.Interval = new TimeSpan(0, 0, 30);
+            //初始化延迟休息提醒检测计时器
+            deferred_break_timer = new DispatcherTimer();
+            deferred_break_timer.Tick += new EventHandler(deferred_break_timer_Tick);
+            deferred_break_timer.Interval = new TimeSpan(0, 0, 1);
             //初始化用眼统计计时器
             useeye_timer = new DispatcherTimer();
             useeye_timer.Tick += new EventHandler(useeye_timer_Tick);
@@ -281,6 +286,11 @@ namespace ProjectEye.Core.Service
             {
                 TryShowDeferredBreakReminder();
             }
+        }
+
+        private void deferred_break_timer_Tick(object sender, EventArgs e)
+        {
+            TryShowDeferredBreakReminder();
         }
 
         private void date_timer_Tick(object sender, EventArgs e)
@@ -508,6 +518,7 @@ namespace ProjectEye.Core.Service
                 useeye_timer.Stop();
                 leave_timer.Stop();
                 back_timer.Stop();
+                deferred_break_timer.Stop();
             }
             busy_timer.Stop();
         }
@@ -726,6 +737,7 @@ namespace ProjectEye.Core.Service
             }
             ApplyWorkRemaining(TimeSpan.Zero);
             PauseWorkCountdown();
+            deferred_break_timer.Start();
             NotifyRuntimeStatusChanged();
         }
 
@@ -733,6 +745,7 @@ namespace ProjectEye.Core.Service
         {
             if (!isBreakDeferred)
             {
+                deferred_break_timer.Stop();
                 return;
             }
 
@@ -770,6 +783,7 @@ namespace ProjectEye.Core.Service
 
             isBreakDeferred = false;
             deferredReminderReadyAt = null;
+            deferred_break_timer.Stop();
             LogRuntimeDebug("Deferred reminder countdown finished. Showing tip window now.");
             busy_timer.Start();
             WindowManager.Show("TipWindow");
