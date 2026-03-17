@@ -12,6 +12,7 @@ Windows-only eye-break reminder app based on the 20-20-20 rule.
 - Pauses timing after configurable inactivity
 - Defers reminders during fullscreen or configured foreground processes
 - Shows a 20-second break reminder after 20 minutes of effective use
+- Uses a softer centered break overlay instead of a harsh full-white screen
 - Includes tray status, settings, statistics, and logging
 
 ## Download
@@ -27,6 +28,7 @@ Use the full zip package. Do not download only the standalone `20min20s.exe`, be
 - The timer counts only real usage time.
 - If there is no keyboard or mouse input for a while, timing pauses automatically.
 - If a reminder becomes due while you are in fullscreen, it is deferred and shown after fullscreen exits.
+- The break screen uses a lower-glare centered card layout to stay visible without flashing a full white screen.
 - The tray icon reflects the current state so you can see whether the app is active, paused, suspended, or waiting to remind you.
 
 ## Run
