@@ -16,13 +16,13 @@ This updates:
 
 - `windows/20min20s/bin/Release/`
 - `dist/20min20s.exe`
-- `dist/20min20s-windows-1.4.3.zip`
+- `dist/20min20s-windows-<version>.zip`
 
 ## What To Upload
 
 Upload the zip package, not just the standalone exe:
 
-- `dist/20min20s-windows-1.4.3.zip`
+- `dist/20min20s-windows-<version>.zip`
 
 Reason:
 
@@ -33,7 +33,7 @@ Reason:
 
 1. Make sure `main` is pushed and clean.
 2. Run the packaging script.
-3. Verify the timestamp of `dist/20min20s-windows-1.4.3.zip`.
+3. Verify the timestamp of `dist/20min20s-windows-<version>.zip`.
 4. Create a Git tag for the release version.
 5. Draft a GitHub Release from that tag.
 6. Upload the zip from `dist/`.
@@ -41,11 +41,11 @@ Reason:
 
 ## Suggested Release Title
 
-- `20min20s 1.4.3`
+- `20min20s <version>`
 
 ## Suggested Asset Name
 
-- `20min20s-windows-1.4.3.zip`
+- `20min20s-windows-<version>.zip`
 
 ## Verification Checklist
 

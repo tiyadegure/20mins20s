@@ -13,7 +13,12 @@ $appOutput = Join-Path $root "20min20s\bin\$Configuration"
 $updaterOutput = Join-Path $root "20min20sUp\bin\$Configuration"
 $dist = Join-Path $repoRoot 'dist'
 $distExe = Join-Path $dist '20min20s.exe'
-$version = '1.4.3'
+$assemblyInfo = Join-Path $root '20min20s\Properties\AssemblyInfo.cs'
+$versionMatch = Select-String -Path $assemblyInfo -Pattern '^\s*\[assembly:\s*AssemblyVersion\("([0-9.]+)"\)\]' | Select-Object -First 1
+if (-not $versionMatch) {
+    throw "Could not determine version from $assemblyInfo"
+}
+$version = $versionMatch.Matches[0].Groups[1].Value
 $zipPath = Join-Path $dist "20min20s-windows-$version.zip"
 
 dotnet restore $solution /p:Configuration=$Configuration /p:Platform='Any CPU'
