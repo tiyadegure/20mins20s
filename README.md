@@ -2,6 +2,8 @@
 
 Windows-only eye-break reminder app based on the 20-20-20 rule.
 
+[简体中文](./README.zh-CN.md)
+
 `20min20s` accumulates only effective usage time. If there is no real keyboard or mouse input for a while, the timer pauses. When a break becomes due during fullscreen apps such as games or videos, the reminder is deferred and shown after fullscreen exits.
 
 ## Current behavior
@@ -33,6 +35,8 @@ Build with:
 pwsh -File .\windows\build-20min20s.ps1
 ```
 
+The packaging script now defaults to `Release` and refreshes the distributable files in `dist/`.
+
 Or:
 
 ```powershell
@@ -49,6 +53,8 @@ Output:
 
 - `windows/20min20s/bin/Debug/20min20s.exe`
 - `windows/20min20s/bin/Release/20min20s.exe`
+- `dist/20min20s.exe`
+- `dist/20min20s-windows-1.4.3.zip`
 
 ## Updates
 
@@ -58,8 +64,24 @@ The in-app update check now reads releases from:
 
 Recommended release asset format:
 
-- `20min20s-windows-v<version>.zip`
+- `20min20s-windows-<version>.zip`
 
 Do not use a standalone `20min20s.exe` downloaded by itself. The app depends on adjacent runtime files and DLLs from the full release package.
 
 This app is derived from an earlier exploratory migration based on `ProjectEye`, but the current repository and release channel are `20min20s`.
+
+## Release
+
+Release builds can be prepared with:
+
+```powershell
+pwsh -File .\windows\build-20min20s.ps1
+```
+
+This updates:
+
+- `windows/20min20s/bin/Release/`
+- `dist/20min20s.exe`
+- `dist/20min20s-windows-1.4.3.zip`
+
+GitHub Release publishing notes are documented in [RELEASE.md](./RELEASE.md).
