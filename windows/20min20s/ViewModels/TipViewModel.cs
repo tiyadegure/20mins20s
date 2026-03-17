@@ -168,7 +168,7 @@ namespace ProjectEye.ViewModels
             var container = new Grid();
             string uiFilePath = $"UI\\{config.options.Style.Theme.ThemeName}_{ScreenName}.json";
             var data = JsonConvert.DeserializeObject<UIDesignModel>(FileHelper.Read(uiFilePath));
-            if (data == null)
+            if (data == null || theme.IsLegacyTipWindowUI(data))
             {
                 data = theme.GetCreateDefaultTipWindowUI(config.options.Style.Theme.ThemeName, ScreenName);
 
@@ -413,6 +413,8 @@ namespace ProjectEye.ViewModels
         //加载配置
         private void LoadConfig()
         {
+            TipContent = theme.GetTipWindowMessage();
+
             //创建快捷键命令
             if (!string.IsNullOrEmpty(config.options.KeyboardShortcuts.Reset))
             {

@@ -33,7 +33,16 @@ namespace ProjectEye.Models
             {
                 TipContent_ = value;
                 OnPropertyChanged();
+                OnPropertyChanged("TIPCONTENT");
             }
+        }
+        /// <summary>
+        /// 用于布局变量绑定的提醒文本
+        /// </summary>
+        public string TIPCONTENT
+        {
+            get { return TipContent_; }
+            set { TipContent = value; }
         }
         private int CountDown_ = 20;
         /// <summary>

@@ -57,6 +57,11 @@ namespace ProjectEye.ViewModels
                         if (FileHelper.Exists(UIConfigPath))
                         {
                             data = JsonConvert.DeserializeObject<UIDesignModel>(FileHelper.Read(UIConfigPath));
+                            if (data == null || theme.IsLegacyTipWindowUI(data))
+                            {
+                                data = theme.GetCreateDefaultTipWindowUI(config.options.Style.Theme.ThemeName, ScreenName);
+                                FileHelper.Write(UIConfigPath, JsonConvert.SerializeObject(data));
+                            }
 
                         }
                         else

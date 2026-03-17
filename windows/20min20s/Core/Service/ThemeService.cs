@@ -207,7 +207,7 @@ namespace ProjectEye.Core.Service
 
             var tipText = new ElementModel();
             tipText.Type = Project1.UI.Controls.Enums.DesignItemType.Text;
-            tipText.Text = GetDefaultTipMessage();
+            tipText.Text = "{tipcontent}";
             tipText.Opacity = 1;
             tipText.TextColor = titleColor;
             tipText.Width = cardWidth - 92;
@@ -285,7 +285,7 @@ namespace ProjectEye.Core.Service
             return data;
         }
 
-        private string GetDefaultTipMessage()
+        public string GetTipWindowMessage()
         {
             const string legacyDefaultZh = "您已持续用眼{t}分钟，休息一会吧！请将注意力集中在至少6米远的地方20秒！";
             const string balancedDefaultZh = "你已经连续看屏幕 {t} 分钟了。";
@@ -306,6 +306,24 @@ namespace ProjectEye.Core.Service
             }
 
             return config.options.Style.TipContent;
+        }
+
+        public bool IsLegacyTipWindowUI(UIDesignModel data)
+        {
+            if (data == null || data.ContainerAttr == null || data.Elements == null)
+            {
+                return false;
+            }
+
+            var background = data.ContainerAttr.Background as SolidColorBrush;
+            return background != null
+                && background.Color == Colors.White
+                && data.ContainerAttr.Opacity >= .95
+                && data.Elements.Any(m => m.Type == Project1.UI.Controls.Enums.DesignItemType.Image
+                    && !string.IsNullOrWhiteSpace(m.Image)
+                    && m.Image.Contains("tipImage.png"))
+                && data.Elements.Any(m => m.Type == Project1.UI.Controls.Enums.DesignItemType.Button && m.Command == "rest")
+                && data.Elements.Any(m => m.Type == Project1.UI.Controls.Enums.DesignItemType.Button && m.Command == "break");
         }
 
         private static double Clamp(double value, double min, double max)
