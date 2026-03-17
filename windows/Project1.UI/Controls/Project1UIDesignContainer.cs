@@ -1,5 +1,6 @@
 ﻿
 using Project1.UI.Controls.Commands;
+using Project1.UI.Controls.Converters;
 using Project1.UI.Controls.Data;
 using Project1.UI.Controls.Enums;
 using Project1.UI.Controls.Models;
@@ -49,6 +50,13 @@ namespace Project1.UI.Controls
             containerModel = new ContainerModel();
             containerModel.Background = Brushes.White;
             containerModel.Opacity = .8;
+            containerModel.CenterPanelBackground = Brushes.Transparent;
+            containerModel.CenterPanelBorderBrush = Brushes.Transparent;
+            containerModel.CenterPanelOpacity = 0;
+            containerModel.CenterPanelBorderThickness = 0;
+            containerModel.CenterPanelCornerRadius = 0;
+            containerModel.CenterPanelWidth = 0;
+            containerModel.CenterPanelHeight = 0;
 
             Border container = new Border();
             container.Width = Double.NaN;
@@ -69,6 +77,63 @@ namespace Project1.UI.Controls
                 Mode = BindingMode.OneWay,
 
             });
+
+            Border centerPanel = new Border();
+            centerPanel.SetValue(ZIndexProperty, 0);
+            centerPanel.HorizontalAlignment = HorizontalAlignment.Center;
+            centerPanel.VerticalAlignment = VerticalAlignment.Center;
+            centerPanel.Effect = new DropShadowEffect()
+            {
+                BlurRadius = 30,
+                ShadowDepth = 0,
+                Opacity = .18,
+                Color = Colors.Black
+            };
+            BindingOperations.SetBinding(centerPanel, WidthProperty, new Binding()
+            {
+                Source = containerModel,
+                Path = new PropertyPath("CenterPanelWidth"),
+                Mode = BindingMode.OneWay,
+            });
+            BindingOperations.SetBinding(centerPanel, HeightProperty, new Binding()
+            {
+                Source = containerModel,
+                Path = new PropertyPath("CenterPanelHeight"),
+                Mode = BindingMode.OneWay,
+            });
+            BindingOperations.SetBinding(centerPanel, BackgroundProperty, new Binding()
+            {
+                Source = containerModel,
+                Path = new PropertyPath("CenterPanelBackground"),
+                Mode = BindingMode.OneWay,
+            });
+            BindingOperations.SetBinding(centerPanel, Border.BorderBrushProperty, new Binding()
+            {
+                Source = containerModel,
+                Path = new PropertyPath("CenterPanelBorderBrush"),
+                Mode = BindingMode.OneWay,
+            });
+            BindingOperations.SetBinding(centerPanel, OpacityProperty, new Binding()
+            {
+                Source = containerModel,
+                Path = new PropertyPath("CenterPanelOpacity"),
+                Mode = BindingMode.OneWay,
+            });
+            BindingOperations.SetBinding(centerPanel, Border.BorderThicknessProperty, new Binding()
+            {
+                Source = containerModel,
+                Path = new PropertyPath("CenterPanelBorderThickness"),
+                Mode = BindingMode.OneWay,
+                Converter = new StringConverter()
+            });
+            BindingOperations.SetBinding(centerPanel, Border.CornerRadiusProperty, new Binding()
+            {
+                Source = containerModel,
+                Path = new PropertyPath("CenterPanelCornerRadius"),
+                Mode = BindingMode.OneWay,
+                Converter = new StringConverter()
+            });
+            this.Children.Add(centerPanel);
             textAlignmentData = new TextAlignmentData();
         }
         private void Project1UIDesignContainer_Loaded(object sender, RoutedEventArgs e)
@@ -351,6 +416,13 @@ namespace Project1.UI.Controls
         {
             containerModel.Background = data.Background;
             containerModel.Opacity = data.Opacity;
+            containerModel.CenterPanelBackground = data.CenterPanelBackground;
+            containerModel.CenterPanelBorderBrush = data.CenterPanelBorderBrush;
+            containerModel.CenterPanelOpacity = data.CenterPanelOpacity;
+            containerModel.CenterPanelBorderThickness = data.CenterPanelBorderThickness;
+            containerModel.CenterPanelCornerRadius = data.CenterPanelCornerRadius;
+            containerModel.CenterPanelWidth = data.CenterPanelWidth;
+            containerModel.CenterPanelHeight = data.CenterPanelHeight;
         }
         #endregion
 

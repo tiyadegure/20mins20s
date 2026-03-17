@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 
 namespace ProjectEye.Core.Service
@@ -155,82 +156,125 @@ namespace ProjectEye.Core.Service
 
             //创建默认布局
             var data = new UIDesignModel();
+            bool isDark = themeName == "Dark";
+            double screenWidth = screenSize.Width;
+            double screenHeight = screenSize.Height;
+            double cardWidth = Math.Min(screenWidth - 48, Clamp(screenWidth * 0.42, 460, 620));
+            double cardHeight = Math.Min(screenHeight - 48, Clamp(screenHeight * 0.58, 430, 600));
+            double cardLeft = screenWidth / 2 - cardWidth / 2;
+            double cardTop = screenHeight / 2 - cardHeight / 2;
+
             data.ContainerAttr = new ContainerModel()
             {
-                Background = Brushes.White,
-                Opacity = .98
+                Background = isDark ? Project1UIColor.Get("#14161A") : Project1UIColor.Get("#F1F4F8"),
+                Opacity = isDark ? .84 : .9,
+                CenterPanelBackground = isDark ? Project1UIColor.Get("#1E232D") : Project1UIColor.Get("#FCFDFE"),
+                CenterPanelBorderBrush = isDark ? Project1UIColor.Get("#31394A") : Project1UIColor.Get("#D9E1EC"),
+                CenterPanelOpacity = isDark ? .94 : .96,
+                CenterPanelBorderThickness = 1,
+                CenterPanelCornerRadius = 28,
+                CenterPanelWidth = cardWidth,
+                CenterPanelHeight = cardHeight
             };
 
             var elements = new List<ElementModel>();
+            Brush badgeColor = isDark ? Project1UIColor.Get("#8EA8FF") : Project1UIColor.Get("#4568D1");
+            Brush titleColor = isDark ? Project1UIColor.Get("#F3F6FB") : Project1UIColor.Get("#243147");
+            Brush detailColor = isDark ? Project1UIColor.Get("#B7C0D1") : Project1UIColor.Get("#5F6C81");
+            Brush countdownColor = isDark ? Project1UIColor.Get("#8EA8FF") : Project1UIColor.Get("#3659D6");
+
+            var badge = new ElementModel();
+            badge.Type = Project1.UI.Controls.Enums.DesignItemType.Text;
+            badge.Text = GetResourceText("Lang_TipWindowBadge", isDark ? "Break reminder" : "护眼休息提醒");
+            badge.Opacity = .96;
+            badge.TextColor = badgeColor;
+            badge.Width = cardWidth - 96;
+            badge.Height = 28;
+            badge.X = cardLeft + 48;
+            badge.Y = cardTop + 34;
+            badge.FontSize = 16;
+            badge.IsTextBold = true;
+            badge.TextAlignment = 1;
+
             var tipimage = new ElementModel();
             tipimage.Type = Project1.UI.Controls.Enums.DesignItemType.Image;
-            tipimage.Width = 272;
+            tipimage.Width = 156;
             tipimage.Opacity = 1;
-            tipimage.Height = 187;
+            tipimage.Height = 156;
             tipimage.Image = $"pack://application:,,,/20min20s;component/Resources/Themes/{themeName}/Images/tipImage.png";
-            tipimage.X = screenSize.Width / 2 - tipimage.Width / 2;
-            tipimage.Y = screenSize.Height * .24;
+            tipimage.X = screenWidth / 2 - tipimage.Width / 2;
+            tipimage.Y = badge.Y + badge.Height + 18;
 
             var tipText = new ElementModel();
             tipText.Type = Project1.UI.Controls.Enums.DesignItemType.Text;
-            tipText.Text = "您已持续用眼{t}分钟，休息一会吧！请将注意力集中在至少6米远的地方20秒！";
+            tipText.Text = GetDefaultTipMessage();
             tipText.Opacity = 1;
-            tipText.TextColor = Project1UIColor.Get("#45435b");
-            tipText.Width = 400;
-            tipText.Height = 50;
-            tipText.X = screenSize.Width / 2 - tipText.Width / 2;
-            tipText.Y = tipimage.Y + tipimage.Height + tipText.Height + 10;
-            tipText.FontSize = 20;
+            tipText.TextColor = titleColor;
+            tipText.Width = cardWidth - 92;
+            tipText.Height = 92;
+            tipText.X = cardLeft + 46;
+            tipText.Y = tipimage.Y + tipimage.Height + 22;
+            tipText.FontSize = 26;
+            tipText.IsTextBold = true;
+            tipText.TextAlignment = 1;
+
+            var detailText = new ElementModel();
+            detailText.Type = Project1.UI.Controls.Enums.DesignItemType.Text;
+            detailText.Text = GetResourceText(
+                "Lang_TipWindowDetail",
+                isDark
+                    ? "Look at something at least 20 feet away and let your eyes refocus for 20 seconds."
+                    : "请把视线移到至少 6 米远处，给眼睛 20 秒重新对焦。");
+            detailText.Opacity = .94;
+            detailText.TextColor = detailColor;
+            detailText.Width = cardWidth - 112;
+            detailText.Height = 56;
+            detailText.X = cardLeft + 56;
+            detailText.Y = tipText.Y + tipText.Height + 4;
+            detailText.FontSize = 15;
+            detailText.TextAlignment = 1;
 
             var restBtn = new ElementModel();
             restBtn.Type = Project1.UI.Controls.Enums.DesignItemType.Button;
-            restBtn.Width = 110;
-            restBtn.Height = 45;
-            restBtn.FontSize = 14;
-            restBtn.Text = "好的";
+            restBtn.Width = 136;
+            restBtn.Height = 46;
+            restBtn.FontSize = 15;
+            restBtn.Text = GetResourceText("Lang_RestNow", "开始休息");
             restBtn.Opacity = 1;
             restBtn.Command = "rest";
-
-            restBtn.X = screenSize.Width / 2 - (restBtn.Width * 2 + 10) / 2;
-            restBtn.Y = tipText.Y + tipText.Height + 20;
+            restBtn.Style = "tip_yes";
+            restBtn.X = screenWidth / 2 - (restBtn.Width * 2 + 14) / 2;
+            restBtn.Y = detailText.Y + detailText.Height + 40;
 
             var breakBtn = new ElementModel();
             breakBtn.Type = Project1.UI.Controls.Enums.DesignItemType.Button;
-            breakBtn.Width = 110;
-            breakBtn.Height = 45;
-            breakBtn.FontSize = 14;
-            breakBtn.Text = "暂时不";
-            breakBtn.Style = "basic";
+            breakBtn.Width = 136;
+            breakBtn.Height = 46;
+            breakBtn.FontSize = 15;
+            breakBtn.Text = GetResourceText("Lang_NotNow", "暂时不");
+            breakBtn.Style = "tip_no";
             breakBtn.Command = "break";
             breakBtn.Opacity = 1;
-            breakBtn.X = screenSize.Width / 2 - (restBtn.Width * 2 + 10) / 2 + (restBtn.Width + 10);
-            breakBtn.Y = tipText.Y + tipText.Height + 20;
+            breakBtn.X = restBtn.X + restBtn.Width + 14;
+            breakBtn.Y = restBtn.Y;
 
             var countDownText = new ElementModel();
             countDownText.Text = "{countdown}";
-            countDownText.FontSize = 50;
+            countDownText.FontSize = 74;
             countDownText.IsTextBold = true;
             countDownText.Type = Project1.UI.Controls.Enums.DesignItemType.Text;
-            countDownText.TextColor = Brushes.Black;
+            countDownText.TextColor = countdownColor;
             countDownText.Opacity = 1;
-            countDownText.Width = 100;
-            countDownText.Height = 60;
-            countDownText.X = screenSize.Width / 2 - countDownText.Width / 2;
-            countDownText.Y = restBtn.Y + restBtn.Height;
+            countDownText.Width = 180;
+            countDownText.Height = 90;
+            countDownText.X = screenWidth / 2 - countDownText.Width / 2;
+            countDownText.Y = restBtn.Y - 8;
+            countDownText.TextAlignment = 1;
 
-
-
-            if (themeName == "Dark")
-            {
-                //深色主题的样式
-
-                data.ContainerAttr.Background = Project1UIColor.Get("#1A1B1C");
-                tipText.TextColor = Project1UIColor.Get("#D9D9D9");
-                countDownText.TextColor = Project1UIColor.Get("#D9D9D9");
-
-            }
+            elements.Add(badge);
             elements.Add(tipimage);
             elements.Add(tipText);
+            elements.Add(detailText);
             elements.Add(restBtn);
             elements.Add(breakBtn);
             elements.Add(countDownText);
@@ -239,6 +283,39 @@ namespace ProjectEye.Core.Service
             data.Elements = elements;
 
             return data;
+        }
+
+        private string GetDefaultTipMessage()
+        {
+            const string legacyDefaultZh = "您已持续用眼{t}分钟，休息一会吧！请将注意力集中在至少6米远的地方20秒！";
+            const string balancedDefaultZh = "你已经连续看屏幕 {t} 分钟了。";
+            const string balancedDefaultEn = "You've been looking at the screen for {t} minutes.";
+
+            string localizedDefault = GetResourceText(
+                "Lang_TipWindowMessage",
+                config.options.Style.Language?.Value == "en"
+                    ? balancedDefaultEn
+                    : balancedDefaultZh);
+
+            if (string.IsNullOrWhiteSpace(config.options.Style.TipContent)
+                || config.options.Style.TipContent == legacyDefaultZh
+                || config.options.Style.TipContent == balancedDefaultZh
+                || config.options.Style.TipContent == balancedDefaultEn)
+            {
+                return localizedDefault;
+            }
+
+            return config.options.Style.TipContent;
+        }
+
+        private static double Clamp(double value, double min, double max)
+        {
+            return Math.Max(min, Math.Min(max, value));
+        }
+
+        private static string GetResourceText(string key, string fallback)
+        {
+            return Application.Current?.Resources[key]?.ToString() ?? fallback;
         }
     }
 }

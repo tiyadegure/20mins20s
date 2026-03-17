@@ -49,6 +49,11 @@
     <sys:String x:Key="Lang_Fadeinandfadeout">Fade in and fade out</sys:String>
     <sys:String x:Key="Lang_Fullscreennotificationappearance">Fullscreen notification appearance</sys:String>
     <sys:String x:Key="Lang_Customize">Customize</sys:String>
+    <sys:String x:Key="Lang_RestNow">Start break</sys:String>
+    <sys:String x:Key="Lang_NotNow">Not now</sys:String>
+    <sys:String x:Key="Lang_TipWindowBadge">Eye break reminder</sys:String>
+    <sys:String x:Key="Lang_TipWindowMessage">You've been looking at the screen for {t} minutes.</sys:String>
+    <sys:String x:Key="Lang_TipWindowDetail">Look at something at least 20 feet away and let your eyes refocus for 20 seconds.</sys:String>
     <sys:String x:Key="Lang_Earlypopupforbreaktime">Early popup for break time</sys:String>
     <sys:String x:Key="Lang_Popupleadtime">Popup lead time</sys:String>
     <sys:String x:Key="Lang_Defaultactionafterthepopup">Default action after the popup</sys:String>

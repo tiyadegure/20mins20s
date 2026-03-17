@@ -177,10 +177,36 @@ namespace ProjectEye.ViewModels
             var containerBG = new Border();
             containerBG.Width = Double.NaN;
             containerBG.Height = Double.NaN;
-            containerBG.SetValue(Grid.ZIndexProperty, -1);
+            containerBG.SetValue(Grid.ZIndexProperty, -2);
             containerBG.Background = data.ContainerAttr.Background;
             containerBG.Opacity = data.ContainerAttr.Opacity;
             container.Children.Add(containerBG);
+
+            if (data.ContainerAttr.CenterPanelWidth > 0
+                && data.ContainerAttr.CenterPanelHeight > 0
+                && data.ContainerAttr.CenterPanelBackground != null)
+            {
+                var centerPanel = new Border();
+                centerPanel.SetValue(Grid.ZIndexProperty, -1);
+                centerPanel.Width = data.ContainerAttr.CenterPanelWidth;
+                centerPanel.Height = data.ContainerAttr.CenterPanelHeight;
+                centerPanel.HorizontalAlignment = HorizontalAlignment.Center;
+                centerPanel.VerticalAlignment = VerticalAlignment.Center;
+                centerPanel.Background = data.ContainerAttr.CenterPanelBackground;
+                centerPanel.BorderBrush = data.ContainerAttr.CenterPanelBorderBrush;
+                centerPanel.BorderThickness = new Thickness(data.ContainerAttr.CenterPanelBorderThickness);
+                centerPanel.CornerRadius = new CornerRadius(data.ContainerAttr.CenterPanelCornerRadius);
+                centerPanel.Opacity = data.ContainerAttr.CenterPanelOpacity;
+                centerPanel.Effect = new System.Windows.Media.Effects.DropShadowEffect()
+                {
+                    BlurRadius = 30,
+                    ShadowDepth = 0,
+                    Opacity = .18,
+                    Color = Colors.Black
+                };
+                container.Children.Add(centerPanel);
+            }
+
             foreach (var element in data.Elements)
             {
                 var ttf = new TranslateTransform()

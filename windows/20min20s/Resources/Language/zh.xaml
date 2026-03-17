@@ -50,6 +50,11 @@
     <sys:String x:Key="Lang_Fadeinandfadeout">渐出渐隐</sys:String>
     <sys:String x:Key="Lang_Fullscreennotificationappearance">全屏提示界面</sys:String>
     <sys:String x:Key="Lang_Customize">自定义</sys:String>
+    <sys:String x:Key="Lang_RestNow">开始休息</sys:String>
+    <sys:String x:Key="Lang_NotNow">暂时不</sys:String>
+    <sys:String x:Key="Lang_TipWindowBadge">护眼休息提醒</sys:String>
+    <sys:String x:Key="Lang_TipWindowMessage">你已经连续看屏幕 {t} 分钟了。</sys:String>
+    <sys:String x:Key="Lang_TipWindowDetail">请把视线移到至少 6 米远处，给眼睛 20 秒重新对焦。</sys:String>
     <sys:String x:Key="Lang_Earlypopupforbreaktime">休息预提醒弹窗</sys:String>
     <sys:String x:Key="Lang_Popupleadtime">预提醒提前时间</sys:String>
     <sys:String x:Key="Lang_Defaultactionafterthepopup">预提醒弹窗的默认动作</sys:String>
