@@ -47,28 +47,13 @@ namespace ProjectEye.ViewModels
         {
             if (e.PropertyName == "Container")
             {
-                UIConfigPath = $"UI\\{config.options.Style.Theme.ThemeName}_{ScreenName}.json";
+                UIConfigPath = theme.GetTipWindowUIFilePath(config.options.Style.Theme.ThemeName, ScreenName);
                 Debug.WriteLine("窗口：" + WindowInstance.ActualWidth + "，屏幕：" + ScreenName + "，界面文件：" + UIConfigPath);
                 if (Container != null)
                 {
                     try
                     {
-                        var data = new UIDesignModel();
-                        if (FileHelper.Exists(UIConfigPath))
-                        {
-                            data = JsonConvert.DeserializeObject<UIDesignModel>(FileHelper.Read(UIConfigPath));
-                            if (data == null || theme.IsLegacyTipWindowUI(data))
-                            {
-                                data = theme.GetCreateDefaultTipWindowUI(config.options.Style.Theme.ThemeName, ScreenName);
-                                FileHelper.Write(UIConfigPath, JsonConvert.SerializeObject(data));
-                            }
-
-                        }
-                        else
-                        {
-                            data = theme.GetCreateDefaultTipWindowUI(config.options.Style.Theme.ThemeName, ScreenName);
-                            FileHelper.Write(UIConfigPath, JsonConvert.SerializeObject(data));
-                        }
+                        var data = theme.LoadOrCreateTipWindowUI(config.options.Style.Theme.ThemeName, ScreenName);
                         Container.SetContainerAttr(data.ContainerAttr);
                         Container.ImportElements(data.Elements);
                     }

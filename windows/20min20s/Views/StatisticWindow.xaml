@@ -8,11 +8,198 @@
         xmlns:chart="clr-namespace:Project1.UI.Controls.ChartControl;assembly=Project1.UI"
         mc:Ignorable="d"
                      xmlns:date="clr-namespace:Project1.UI.Controls.DatePicker;assembly=Project1.UI"
-        Title="{DynamicResource Lang_Statistics}" Height="600" Width="800"
+        Title="{DynamicResource Lang_Statistics}" Height="780" Width="1120"
+                     MinWidth="980" MinHeight="700"
+                     MaxWidth="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
+                     MaxHeight="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
                      WindowStartupLocation="CenterScreen" Icon="/20min20s;component/Resources/sunglasses.ico">
     <ui:Project1UIWindow.Resources>
+        <SolidColorBrush x:Key="StatsPageBackgroundBrush" Color="#11111B"/>
+        <SolidColorBrush x:Key="StatsShellBackgroundBrush" Color="#1E1E2E"/>
+        <SolidColorBrush x:Key="StatsShellBorderBrush" Color="#2A2C3B"/>
+        <SolidColorBrush x:Key="StatsMutedBrush" Color="#A6ADC8"/>
+        <SolidColorBrush x:Key="StatsTabsSurfaceBrush" Color="#181825"/>
+        <SolidColorBrush x:Key="StatsTabsBorderBrush" Color="#313244"/>
+        <SolidColorBrush x:Key="StatsContentSurfaceBrush" Color="#1E1E2E"/>
+        <SolidColorBrush x:Key="StatsContentBorderBrush" Color="#313244"/>
+        <SolidColorBrush x:Key="StatsAccentBrush" Color="#CBA6F7"/>
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource FontBrush}"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="Padding" Value="12,0,34,0"/>
+            <Setter Property="Background" Value="#181825"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#181825"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#181825"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#313244"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#CDD6F4"/>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+            <Setter Property="Background" Value="#181825"/>
+            <Setter Property="Foreground" Value="#A6ADC8"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#313244"/>
+                    <Setter Property="Foreground" Value="#CDD6F4"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#313244"/>
+                    <Setter Property="Foreground" Value="#CBA6F7"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#45475A"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent">
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Focusable="False"
+                                                  IsTabStop="False"
+                                                  Opacity="0"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Focusable="False"
+                                           Background="Transparent">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Width="4"
+                                                        CornerRadius="2"
+                                                        Background="#45475A"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Focusable="False"
+                                                  IsTabStop="False"
+                                                  Opacity="0"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Height" Value="4"/>
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type ui:ContentCard}">
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+        <Style x:Key="StatsSectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+        <Style x:Key="StatsSectionHintStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource StatsMutedBrush}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,18"/>
+        </Style>
+        <Style TargetType="TabControl" BasedOn="{StaticResource {x:Type TabControl}}">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
+        <Style x:Key="TopNavTabItemStyle" TargetType="TabItem">
+            <Setter Property="Foreground" Value="#A6ADC8"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="TabBorder"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter ContentSource="Header"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
+                                              TextElement.FontSize="14"
+                                              TextElement.FontWeight="SemiBold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="#313244"/>
+                                <Setter Property="Foreground" Value="#CDD6F4"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="#313244"/>
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#585B70"/>
+                                <Setter Property="Foreground" Value="#CBA6F7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TopNavTabControlStyle" TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="18"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0"
+                                    Background="{StaticResource StatsTabsSurfaceBrush}"
+                                    BorderBrush="{StaticResource StatsTabsBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="16"
+                                    Padding="10">
+                                <TabPanel x:Name="HeaderPanel"
+                                          IsItemsHost="True"
+                                          KeyboardNavigation.TabIndex="1"/>
+                            </Border>
+                            <Border Grid.Row="2"
+                                    Background="{StaticResource StatsContentSurfaceBrush}"
+                                    BorderBrush="{StaticResource StatsContentBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="18"
+                                    Padding="24">
+                                <ContentPresenter x:Name="PART_SelectedContentHost"
+                                                  ContentSource="SelectedContent"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style TargetType="Border" x:Key="DataCard">
             <Setter Property="CornerRadius" Value="8"/>
@@ -74,7 +261,7 @@
                     <RowDefinition Height="1*"/>
 
                 </Grid.RowDefinitions>
-                <Border Margin="80,50" Background="White" CornerRadius="2" Opacity=".98">
+                <Border Margin="80,50" Background="#1E1E2E" BorderBrush="#313244" BorderThickness="1" CornerRadius="18" Opacity=".98">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="5" Opacity="0.3"  ShadowDepth="0"/>
                     </Border.Effect>
@@ -129,26 +316,67 @@
             </Grid>
         </ui:Project1UIModal>
     </ui:Project1UIWindow.ExtElement>
-    <Grid Margin="10">
+    <Grid Background="{StaticResource StatsPageBackgroundBrush}">
+        <Border Margin="20"
+                Background="{StaticResource StatsShellBackgroundBrush}"
+                BorderBrush="{StaticResource StatsShellBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="22">
+            <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="4,4,4,18">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="{DynamicResource Lang_Statistics}" FontSize="22" FontWeight="SemiBold"/>
+                <TextBlock Text="{DynamicResource Lang_Statisticsanalysis}" Margin="0,6,0,0" Foreground="{StaticResource StatsMutedBrush}"/>
+            </StackPanel>
+            <Border Grid.Column="1"
+                    Padding="12,8"
+                    Background="#313244"
+                    BorderBrush="#45475A"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    VerticalAlignment="Center">
+                <TextBlock Text="20min20s" Foreground="#CDD6F4" FontWeight="SemiBold"/>
+            </Border>
+        </Grid>
+    <Grid Grid.Row="1" Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="9*"/>
             <RowDefinition Height="auto"/>
 
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="0">
-            <TabItem Header="{DynamicResource Lang_Thisweek}">
+        <TabControl Grid.Row="0" Style="{StaticResource TopNavTabControlStyle}" ItemContainerStyle="{StaticResource TopNavTabItemStyle}">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE787;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_Thisweek}"/>
+                    </TextBlock>
+                </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <!--<RowDefinition Height="50"/>-->
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <!--<TextBlock Text="本周数据分析" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>-->
-                    <Grid Grid.Row="0">
+                    <StackPanel Margin="0,0,0,18">
+                        <TextBlock Text="{DynamicResource Lang_Thisweek}" Style="{StaticResource StatsSectionTitleStyle}"/>
+                        <TextBlock Text="查看本周工作、休息和跳过情况，并结合趋势给出简短分析。"
+                                   Style="{StaticResource StatsSectionHintStyle}"/>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
                         <ScrollViewer>
                             <StackPanel >
                                 <!--工作-->
-                                <ui:ContentCard Padding="30"  Margin="0" Background="#F2F2F9">
+                                <ui:ContentCard Padding="30"  Margin="0" Background="#23263A" BorderBrush="#313244" BorderThickness="1">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -166,13 +394,13 @@
                                                     <Image Source="/Resources/work.png" Width="32" Height="32"/>
 
                                                     <!--<ui:Icon Unicode="&#xE977;" FontSize="24" VerticalAlignment="Center" Foreground="{DynamicResource ThemeBrush}"/>-->
-                                                    <TextBlock Text="{DynamicResource Lang_Work}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource ThemeBrush}"/>
+                                                    <TextBlock Text="{DynamicResource Lang_Work}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#89B4FA"/>
                                                 </StackPanel>
                                                 <Grid Margin="0,20,0,0">
                                                     <ui:CompareView DataA="{Binding Data.LastWeekWork}" DataB="{Binding Data.WeekWork}" PopupText="{DynamicResource Lang_StatisticsWeekHoursTip}"/>
                                                 </Grid>
                                             </StackPanel>
-                                            <chart:Chart Grid.Row="1" Data="{Binding Data.WeekWorkData}" TickText="{DynamicResource Lang_StatisticsXhours}" TickLabelWidth="70" Margin="0,10,0,0" ItemColor="{DynamicResource ThemeBrush}" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
+                                            <chart:Chart Grid.Row="1" Data="{Binding Data.WeekWorkData}" TickText="{DynamicResource Lang_StatisticsXhours}" TickLabelWidth="70" Margin="0,10,0,0" ItemColor="#89B4FA" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
 
                                         </Grid>
                                         <Grid Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -197,17 +425,17 @@
                                                             </Border>
                                                             <DataTemplate.Triggers>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekWorkLevel,Path=Text}" Value="0">
-                                                                    <Setter TargetName="WorkLevelBorder" Property="Background" Value="#7FE3E3E3"/>
-                                                                    <Setter TargetName="WeekWorkLevelText" Property="Foreground" Value="#FF686868"/>
+                                                                    <Setter TargetName="WorkLevelBorder" Property="Background" Value="#313244"/>
+                                                                    <Setter TargetName="WeekWorkLevelText" Property="Foreground" Value="#CDD6F4"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekWorkLevel,Path=Text}" Value="1">
-                                                                    <Setter TargetName="WorkLevelBorder" Property="Background" Value="#7FFFD413"/>
-                                                                    <Setter TargetName="WeekWorkLevelText" Property="Foreground" Value="#FFB99800"/>
+                                                                    <Setter TargetName="WorkLevelBorder" Property="Background" Value="#4C3A32"/>
+                                                                    <Setter TargetName="WeekWorkLevelText" Property="Foreground" Value="#FAB387"/>
                                                                     <Setter TargetName="WorkLevelIcon" Property="Unicode" Value="&#xE74A;"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekWorkLevel,Path=Text}" Value="2">
-                                                                    <Setter TargetName="WorkLevelBorder" Property="Background" Value="#7FFF2E00"/>
-                                                                    <Setter TargetName="WeekWorkLevelText" Property="Foreground" Value="#FF9C0000"/>
+                                                                    <Setter TargetName="WorkLevelBorder" Property="Background" Value="#4B3140"/>
+                                                                    <Setter TargetName="WeekWorkLevelText" Property="Foreground" Value="#F38BA8"/>
                                                                     <Setter TargetName="WorkLevelIcon" Property="Unicode" Value="&#xE8C9;"/>
                                                                 </DataTrigger>
                                                             </DataTemplate.Triggers>
@@ -222,7 +450,7 @@
 
                                 </ui:ContentCard>
                                 <!--休息-->
-                                <ui:ContentCard Padding="30"  Margin="0" Background="#F9FDFA">
+                                <ui:ContentCard Padding="30" Background="#1D2A26" BorderBrush="#294036" BorderThickness="1">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -239,13 +467,13 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image Source="/Resources/rest.png" Width="32" Height="32"/>
                                                     <!--<ui:Icon Unicode="&#xF2FA;" FontSize="24" VerticalAlignment="Center" Foreground="#82D29A"/>-->
-                                                    <TextBlock Text="{DynamicResource Lang_Break}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#82D29A"/>
+                                                    <TextBlock Text="{DynamicResource Lang_Break}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#A6E3A1"/>
                                                 </StackPanel>
                                                 <Grid Margin="0,20,0,0">
                                                     <ui:CompareView DataA="{Binding Data.LastWeekRest}" DataB="{Binding Data.WeekRest}" PopupText="{DynamicResource Lang_StatisticsWeekMinutesTip}"/>
                                                 </Grid>
                                             </StackPanel>
-                                            <chart:Chart Grid.Row="1" Data="{Binding Data.WeekRestData}" TickText="{DynamicResource Lang_StatisticsXminutes}" TickLabelWidth="70" ItemColor="#82D29A" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
+                                            <chart:Chart Grid.Row="1" Data="{Binding Data.WeekRestData}" TickText="{DynamicResource Lang_StatisticsXminutes}" TickLabelWidth="70" ItemColor="#A6E3A1" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
 
                                         </Grid>
                                         <Grid Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -269,23 +497,23 @@
                                                             </Border>
                                                             <DataTemplate.Triggers>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekRestLevel,Path=Text}" Value="0">
-                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#7FE3E3E3"/>
-                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#FF686868"/>
+                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#313244"/>
+                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#CDD6F4"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekRestLevel,Path=Text}" Value="1">
-                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#7FFFD413"/>
-                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#FFB99800"/>
+                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#4C3A32"/>
+                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#FAB387"/>
                                                                     <Setter TargetName="RestLevelIcon" Property="Unicode" Value="&#xE74A;"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekRestLevel,Path=Text}" Value="2">
-                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#7FFF2E00"/>
-                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#FF9C0000"/>
+                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#4B3140"/>
+                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#F38BA8"/>
                                                                     <Setter TargetName="RestLevelIcon" Property="Unicode" Value="&#xE8C9;"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekRestLevel,Path=Text}" Value="3">
-                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#7F6FE455"/>
-                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#FF167616"/>
-                                                                    <Setter TargetName="RestLevelIcon" Property="Unicode" Value="&#xE8C9;"/>
+                                                                    <Setter TargetName="RestLevelBorder" Property="Background" Value="#294036"/>
+                                                                    <Setter TargetName="WeekRestLevelText" Property="Foreground" Value="#A6E3A1"/>
+                                                                    <Setter TargetName="RestLevelIcon" Property="Unicode" Value="&#xE8E1;"/>
                                                                 </DataTrigger>
                                                             </DataTemplate.Triggers>
                                                         </DataTemplate>
@@ -297,7 +525,7 @@
                                     </Grid>
                                 </ui:ContentCard>
                                 <!--跳过-->
-                                <ui:ContentCard Padding="30"  Margin="0" Background="#ffe8e8">
+                                <ui:ContentCard Padding="30" Margin="0,0,0,0" Background="#32232D" BorderBrush="#4B3140" BorderThickness="1">
 
                                     <Grid >
                                         <Grid.ColumnDefinitions>
@@ -317,13 +545,13 @@
                                                     <Image Source="/Resources/break.png" Width="32" Height="32"/>
 
                                                     <!--<ui:Icon Unicode="&#xEE6E;" FontSize="24" VerticalAlignment="Center" Foreground="#F94520"/>-->
-                                                    <TextBlock Text="{DynamicResource Lang_Skip}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#F94520"/>
+                                                    <TextBlock Text="{DynamicResource Lang_Skip}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#F38BA8"/>
                                                 </StackPanel>
                                                 <Grid Margin="0,20,0,0">
                                                     <ui:CompareView DataA="{Binding Data.LastWeekSkip}" DataB="{Binding Data.WeekSkip}" PopupText="{DynamicResource Lang_StatisticsWeekXTip}"/>
                                                 </Grid>
                                             </StackPanel>
-                                            <chart:Chart Grid.Row="1" Data="{Binding Data.WeekSkipData}" TickText="{DynamicResource Lang_StatisticsX}" TickLabelWidth="70" ItemColor="#F94520" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
+                                            <chart:Chart Grid.Row="1" Data="{Binding Data.WeekSkipData}" TickText="{DynamicResource Lang_StatisticsX}" TickLabelWidth="70" ItemColor="#F38BA8" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
 
                                         </Grid>
                                         <Grid Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -347,18 +575,18 @@
                                                             </Border>
                                                             <DataTemplate.Triggers>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekSkipLevel,Path=Text}" Value="0">
-                                                                    <Setter TargetName="SkipLevelBorder" Property="Background" Value="#7FE3E3E3"/>
-                                                                    <Setter TargetName="WeekSkipLevelText" Property="Foreground" Value="#FF686868"/>
+                                                                    <Setter TargetName="SkipLevelBorder" Property="Background" Value="#313244"/>
+                                                                    <Setter TargetName="WeekSkipLevelText" Property="Foreground" Value="#CDD6F4"/>
                                                                 </DataTrigger>
 
                                                                 <DataTrigger Binding="{Binding ElementName=WeekSkipLevel,Path=Text}" Value="1">
-                                                                    <Setter TargetName="SkipLevelBorder" Property="Background" Value="#7FFF2E00"/>
-                                                                    <Setter TargetName="WeekSkipLevelText" Property="Foreground" Value="#FF9C0000"/>
+                                                                    <Setter TargetName="SkipLevelBorder" Property="Background" Value="#4B3140"/>
+                                                                    <Setter TargetName="WeekSkipLevelText" Property="Foreground" Value="#F38BA8"/>
                                                                     <Setter TargetName="SkipLevelIcon" Property="Unicode" Value="&#xE8C9;"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ElementName=WeekSkipLevel,Path=Text}" Value="2">
-                                                                    <Setter TargetName="SkipLevelBorder" Property="Background" Value="#7F6FE455"/>
-                                                                    <Setter TargetName="WeekSkipLevelText" Property="Foreground" Value="#FF167616"/>
+                                                                    <Setter TargetName="SkipLevelBorder" Property="Background" Value="#294036"/>
+                                                                    <Setter TargetName="WeekSkipLevelText" Property="Foreground" Value="#A6E3A1"/>
                                                                     <Setter TargetName="SkipLevelIcon" Property="Unicode" Value="&#xE8E1;"/>
                                                                 </DataTrigger>
                                                             </DataTemplate.Triggers>
@@ -377,7 +605,14 @@
                 </Grid>
 
             </TabItem>
-            <TabItem Header="{DynamicResource Lang_Monthlyview}">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE823;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_Monthlyview}"/>
+                    </TextBlock>
+                </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="25*"/>
@@ -387,10 +622,16 @@
                         <ImageBrush ImageSource="/20min20s;component/Resources/conference_presentation__monochromatic.png" Stretch="Uniform" Opacity=".02"/>
                     </Grid.Background>-->
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" VerticalAlignment="Center"  Grid.ColumnSpan="2" Margin="0,7">
+                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,4">
+                        <TextBlock Text="{DynamicResource Lang_Monthlyview}" Style="{StaticResource StatsSectionTitleStyle}"/>
+                        <TextBlock Text="按月份回看累计工作、休息、跳过和番茄时钟数据，支持导出当月记录。"
+                                   Style="{StaticResource StatsSectionHintStyle}"/>
+                    </StackPanel>
+                    <Grid Grid.Row="2" VerticalAlignment="Center"  Grid.ColumnSpan="2" Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -407,100 +648,101 @@
                 Width="auto"
                             HorizontalAlignment="Right"
                 Height="auto"
-                Style="{DynamicResource basic}"/>
+                Style="{DynamicResource basic}"
+                Background="#313244"
+                Foreground="#CDD6F4"
+                BorderBrush="#45475A"/>
                     </Grid>
-                    <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2">
-                        <Grid Margin="18">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="90"/>
-                                <RowDefinition Height="350"/>
-                                <RowDefinition Height="90"/>
-                                <RowDefinition Height="350"/>
-                                <RowDefinition Height="90"/>
-                                <RowDefinition Height="350"/>
-                                <RowDefinition Height="90"/>
-                                <RowDefinition Height="350"/>
-                            </Grid.RowDefinitions>
-                            <!--工作-->
-                            <StackPanel Grid.Row="0"  VerticalAlignment="Bottom" >
-                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                    <Image Source="/Resources/work.png" Width="32" Height="32"/>
-
-                                    <!--<ui:Icon Unicode="&#xE977;" FontSize="24" VerticalAlignment="Center" Foreground="{DynamicResource ThemeBrush}"/>-->
-                                    <TextBlock Text="{DynamicResource Lang_Work}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource ThemeBrush}"/>
+                    <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2" Margin="0,56,0,0">
+                        <StackPanel Margin="8,12,8,8">
+                            <ui:ContentCard Padding="24" Background="#23263A" BorderBrush="#313244" BorderThickness="1">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <Image Source="/Resources/work.png" Width="32" Height="32"/>
+                                        <TextBlock Text="{DynamicResource Lang_Work}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#89B4FA"/>
+                                    </StackPanel>
+                                    <Grid Margin="0,0,0,12">
+                                        <ui:CompareView DataA="{Binding Data.LastMonthWork}" DataB="{Binding Data.MonthWork}" PopupText="{DynamicResource Lang_StatisticsMonthlyHoursTip}"/>
+                                    </Grid>
+                                    <chart:Chart Data="{Binding Data.MonthWorkData}" TickText="{DynamicResource Lang_StatisticsXhours}" TickLabelWidth="70" Margin="0,6,0,0" ItemColor="#89B4FA" Background="Transparent" IsAnimation="{Binding Data.IsAnimation}">
+                                        <chart:Chart.ContextMenu>
+                                            <ContextMenu StaysOpen="true">
+                                                <MenuItem Header="生成图片" Command="{Binding GenerateMonthlyDataImgCommand}"/>
+                                            </ContextMenu>
+                                        </chart:Chart.ContextMenu>
+                                    </chart:Chart>
                                 </StackPanel>
-                                <Grid Margin="0,10,0,0">
-                                    <ui:CompareView DataA="{Binding Data.LastMonthWork}" DataB="{Binding Data.MonthWork}" PopupText="{DynamicResource Lang_StatisticsMonthlyHoursTip}"/>
-                                </Grid>
-                            </StackPanel>
-                            <chart:Chart Grid.Row="1" Data="{Binding Data.MonthWorkData}" TickText="{DynamicResource Lang_StatisticsXhours}" TickLabelWidth="70" Margin="0,10,0,0" ItemColor="{DynamicResource ThemeBrush}" Background="Transparent" IsAnimation="{Binding Data.IsAnimation}">
-                                <chart:Chart.ContextMenu>
-                                    <ContextMenu StaysOpen="true">
-                                        <MenuItem Header="生成图片" Command="{Binding GenerateMonthlyDataImgCommand}"/>
-                                    </ContextMenu>
-                                </chart:Chart.ContextMenu>
-                            </chart:Chart>
+                            </ui:ContentCard>
 
-                            <!--休息-->
-                            <StackPanel Grid.Row="2"  VerticalAlignment="Bottom" >
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/rest.png" Width="32" Height="32"/>
-
-                                    <!--<ui:Icon Unicode="&#xF2FA;" FontSize="24" VerticalAlignment="Center" Foreground="#1CE072"/>-->
-                                    <TextBlock Text="{DynamicResource Lang_Break}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#1CE072"/>
+                            <ui:ContentCard Padding="24" Background="#1D2A26" BorderBrush="#294036" BorderThickness="1">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <Image Source="/Resources/rest.png" Width="32" Height="32"/>
+                                        <TextBlock Text="{DynamicResource Lang_Break}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#A6E3A1"/>
+                                    </StackPanel>
+                                    <Grid Margin="0,0,0,12">
+                                        <ui:CompareView DataA="{Binding Data.LastMonthRest}" DataB="{Binding Data.MonthRest}" PopupText="{DynamicResource Lang_StatisticsMonthlyMinutesTip}"/>
+                                    </Grid>
+                                    <chart:Chart Data="{Binding Data.MonthRestData}" TickText="{DynamicResource Lang_StatisticsXminutes}" TickLabelWidth="70" ItemColor="#A6E3A1" Background="Transparent" IsAnimation="{Binding Data.IsAnimation}"/>
                                 </StackPanel>
-                                <Grid Margin="0,10,0,0">
-                                    <ui:CompareView DataA="{Binding Data.LastMonthRest}" DataB="{Binding Data.MonthRest}" PopupText="{DynamicResource Lang_StatisticsMonthlyMinutesTip}"/>
-                                </Grid>
-                            </StackPanel>
-                            <chart:Chart Grid.Row="3" Data="{Binding Data.MonthRestData}" TickText="{DynamicResource Lang_StatisticsXminutes}" TickLabelWidth="70" ItemColor="#1CE072"  Background="Transparent" IsAnimation="{Binding Data.IsAnimation}"/>
-                            <!--跳过-->
-                            <StackPanel Grid.Row="4"  VerticalAlignment="Bottom" >
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/break.png" Width="32" Height="32"/>
+                            </ui:ContentCard>
 
-                                    <!--<ui:Icon Unicode="&#xEE6E;" FontSize="24" VerticalAlignment="Center" Foreground="#F94520"/>-->
-                                    <TextBlock Text="{DynamicResource Lang_Skip}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#F94520"/>
+                            <ui:ContentCard Padding="24" Background="#32232D" BorderBrush="#4B3140" BorderThickness="1">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <Image Source="/Resources/break.png" Width="32" Height="32"/>
+                                        <TextBlock Text="{DynamicResource Lang_Skip}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#F38BA8"/>
+                                    </StackPanel>
+                                    <Grid Margin="0,0,0,12">
+                                        <ui:CompareView DataA="{Binding Data.LastMonthSkip}" DataB="{Binding Data.MonthSkip}" PopupText="{DynamicResource Lang_StatisticsMonthlyXTip}"/>
+                                    </Grid>
+                                    <chart:Chart Data="{Binding Data.MonthSkipData}" TickText="{DynamicResource Lang_StatisticsX}" TickLabelWidth="70" ItemColor="#F38BA8" Background="Transparent" IsAnimation="{Binding Data.IsAnimation}"/>
                                 </StackPanel>
-                                <Grid Margin="0,10,0,0">
-                                    <ui:CompareView DataA="{Binding Data.LastMonthSkip}" DataB="{Binding Data.MonthSkip}" PopupText="{DynamicResource Lang_StatisticsMonthlyXTip}"/>
-                                </Grid>
-                            </StackPanel>
-                            <chart:Chart Grid.Row="5" Data="{Binding Data.MonthSkipData}" TickText="{DynamicResource Lang_StatisticsX}" TickLabelWidth="70" ItemColor="#F94520"  Background="Transparent" IsAnimation="{Binding Data.IsAnimation}"/>
+                            </ui:ContentCard>
 
-                            <!--番茄-->
-                            <StackPanel Grid.Row="6"  VerticalAlignment="Bottom" >
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Resources/tomato.png" Width="32" Height="32"/>
-
-                                    <!--<Image Source="/ProjectEye;component/Resources/tomato.ico" Width="22"/>-->
-                                    <TextBlock Text="{DynamicResource Lang_Tomato}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#f03a17"/>
+                            <ui:ContentCard Padding="24" Margin="0,0,0,0" Background="#33251F" BorderBrush="#4C3A32" BorderThickness="1">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <Image Source="/Resources/tomato.png" Width="32" Height="32"/>
+                                        <TextBlock Text="{DynamicResource Lang_Tomato}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#FAB387"/>
+                                    </StackPanel>
+                                    <Grid Margin="0,0,0,12">
+                                        <ui:CompareView DataA="{Binding Data.LastMonthTomato}" DataB="{Binding Data.MonthTomato}" PopupText="{DynamicResource Lang_StatisticsMonthlyNumberTip}"/>
+                                    </Grid>
+                                    <chart:Chart Data="{Binding Data.MonthTomatoData}" TickText="{DynamicResource Lang_number}" TickLabelWidth="70" ItemColor="#FAB387" Background="Transparent" IsAnimation="{Binding Data.IsAnimation}"/>
                                 </StackPanel>
-                                <Grid Margin="0,10,0,0">
-                                    <ui:CompareView DataA="{Binding Data.LastMonthTomato}" DataB="{Binding Data.MonthTomato}" PopupText="{DynamicResource Lang_StatisticsMonthlyNumberTip}"/>
-                                </Grid>
-                            </StackPanel>
-                            <chart:Chart Grid.Row="7" Data="{Binding Data.MonthTomatoData}" TickText="{DynamicResource Lang_number}" TickLabelWidth="70" ItemColor="#f03a17"  Background="Transparent" IsAnimation="{Binding Data.IsAnimation}"/>
-                        </Grid>
+                            </ui:ContentCard>
+                        </StackPanel>
                     </ScrollViewer>
 
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource Lang_TomatoTimer}">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE81E;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_TomatoTimer}"/>
+                    </TextBlock>
+                </TabItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <!--<RowDefinition Height="50"/>-->
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <!--<TextBlock Text="本周数据分析" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>-->
-                    <Grid Grid.Row="0">
+                    <StackPanel Margin="0,0,0,18">
+                        <TextBlock Text="{DynamicResource Lang_TomatoTimer}" Style="{StaticResource StatsSectionTitleStyle}"/>
+                        <TextBlock Text="查看番茄时钟完成数和近期专注节奏，用更轻的视图展示累计情况。"
+                                   Style="{StaticResource StatsSectionHintStyle}"/>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
                         <ScrollViewer>
                             <StackPanel >
 
                                 <!--获得番茄-->
-                                <Border Padding="16" CornerRadius="6" Margin="0,20,0,0">
+                                <Border Padding="20" CornerRadius="18" Margin="0,0,0,0" BorderBrush="#4C3A32" BorderThickness="1">
                                     <Border.Background>
-                                        <SolidColorBrush Color="#f03a17" Opacity=".05"/>
+                                        <SolidColorBrush Color="#33251F" Opacity=".98"/>
                                     </Border.Background>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -519,13 +761,13 @@
                                                     <Image Source="/Resources/tomato.png" Width="32" Height="32"/>
 
                                                     <!--<Image Source="/ProjectEye;component/Resources/tomato.ico" Width="22"/>-->
-                                                    <TextBlock Text="{DynamicResource Lang_Tomato}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#f03a17"/>
+                                                    <TextBlock Text="{DynamicResource Lang_Tomato}" FontSize="17" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="#FAB387"/>
                                                 </StackPanel>
                                                 <Grid Margin="0,20,0,0">
                                                     <ui:CompareView DataA="{Binding Data.TomatoLastWeekCount}" DataB="{Binding Data.TomatoWeekCount}" PopupText="{DynamicResource Lang_StatisticsWeekXTip}"/>
                                                 </Grid>
                                             </StackPanel>
-                                            <chart:Chart Grid.Row="1" Data="{Binding Data.TomatoWeekData}" TickText=" {value}" TickLabelWidth="70" ItemColor="#f03a17" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
+                                            <chart:Chart Grid.Row="1" Data="{Binding Data.TomatoWeekData}" TickText=" {value}" TickLabelWidth="70" ItemColor="#FAB387" Background="Transparent" AverageDivisor="{Binding Data.WeekTrueWorkDays}" IsAnimation="{Binding Data.IsAnimation}"/>
 
                                         </Grid>
                                         <Grid Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -542,8 +784,8 @@
                                 <Button Style="{DynamicResource CustomButton}" Command="{Binding openURLCommand}" CommandParameter="https://zh.wikipedia.org/wiki/%E7%95%AA%E8%8C%84%E5%B7%A5%E4%BD%9C%E6%B3%95" HorizontalAlignment="Left">
                                     
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Cursor="Hand">
-                                                <ui:Icon Unicode="&#xE72A;" Foreground="#4f6bed"/>
-                                                <TextBlock Text="{DynamicResource Lang_Learnmore}" Padding="10" Foreground="#4f6bed"/>
+                                                <ui:Icon Unicode="&#xE72A;" Foreground="#CBA6F7"/>
+                                                <TextBlock Text="{DynamicResource Lang_Learnmore}" Padding="10" Foreground="#CBA6F7"/>
                                             </StackPanel>
                                      
                                 </Button>
@@ -554,5 +796,8 @@
 
             </TabItem>
         </TabControl>
+    </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </ui:Project1UIWindow>

@@ -10,6 +10,7 @@ namespace ProjectEye.Core.Service
         public List<ComboxModel> PreAlertActions { get; set; }
         public List<AnimationModel> Animations { get; set; }
         public List<ComboxModel> Languages { get; set; }
+        public List<ComboxModel> TipWindowStyles { get; set; }
 
         public void Init()
         {
@@ -17,6 +18,7 @@ namespace ProjectEye.Core.Service
             PreAlertActions = new List<ComboxModel>();
             Animations = new List<AnimationModel>();
             Languages = new List<ComboxModel>();
+            TipWindowStyles = new List<ComboxModel>();
 
             Themes.Add(new ThemeModel()
             {
@@ -76,6 +78,22 @@ namespace ProjectEye.Core.Service
             {
                 DisplayName = "English",
                 Value = "en"
+            });
+
+            TipWindowStyles.Add(new ComboxModel()
+            {
+                DisplayName = $"{Application.Current.Resources["Lang_TipWindowStyleBalanced"]}",
+                Value = "balanced"
+            });
+            TipWindowStyles.Add(new ComboxModel()
+            {
+                DisplayName = $"{Application.Current.Resources["Lang_TipWindowStylePrivacy"]}",
+                Value = "privacy"
+            });
+            TipWindowStyles.Add(new ComboxModel()
+            {
+                DisplayName = $"{Application.Current.Resources["Lang_TipWindowStyleMinimal"]}",
+                Value = "minimal"
             });
         }
     }

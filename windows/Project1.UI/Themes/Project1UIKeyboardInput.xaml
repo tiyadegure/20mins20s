@@ -37,12 +37,10 @@
                                 <TextBlock x:Name="PTEXT" Text="{TemplateBinding Placeholder}" HorizontalAlignment="Center" Visibility="Collapsed"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource InputIconForeground}"/>
-                                <ContentPresenter HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            RecognizesAccessKey="True"
-                                          SnapsToDevicePixels="False"
-                                          Content="{TemplateBinding KeyText}"
-                                          />
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="{TemplateBinding Foreground}"
+                                           Text="{TemplateBinding KeyText}"/>
                             </Grid>
                             <Button
                                 x:Name="ClearButton"
@@ -60,7 +58,7 @@
                     <ControlTemplate.Triggers>
 
                         <!--判断是否有按键-->
-                        <DataTrigger Binding="{Binding Path=KeyText, RelativeSource={RelativeSource Mode=Self}}" Value="">
+                        <DataTrigger Binding="{Binding Path=KeyText, RelativeSource={RelativeSource TemplatedParent}}" Value="">
                             <Setter TargetName="PTEXT" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="ClearButton" Property="Visibility" Value="Hidden" />
                         </DataTrigger>

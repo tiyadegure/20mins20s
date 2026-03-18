@@ -47,6 +47,7 @@ namespace ProjectEye.Models
         public List<ComboxModel> PreAlertActions { get; set; }
         public List<AnimationModel> Animations { get; set; }
         public List<ComboxModel> Languages { get; set; }
+        public List<ComboxModel> TipWindowStyles { get; set; }
 
         public bool IsPreAlert
         {

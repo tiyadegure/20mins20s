@@ -165,9 +165,12 @@ namespace ProjectEye.ViewModels
         private void openurlCommand_action(object obj)
         {
             string url = obj.ToString();
-            if (!string.IsNullOrEmpty(url))
+            if (!string.IsNullOrEmpty(url) && !string.Equals(url, "NULL", StringComparison.OrdinalIgnoreCase))
             {
-                Process.Start(new ProcessStartInfo(url));
+                Process.Start(new ProcessStartInfo(url)
+                {
+                    UseShellExecute = true
+                });
             }
         }
 

@@ -251,7 +251,7 @@ namespace ProjectEye.Core.Service
         private void CreateTrayMenu()
         {
             contextMenu = new ContextMenu();
-            contextMenu.MinWidth = 240;
+            contextMenu.MinWidth = 288;
             if (!trayMenuDeactivateHooked)
             {
                 App.Current.Deactivated += (e, c) =>
@@ -268,35 +268,49 @@ namespace ProjectEye.Core.Service
             menuItem_Status.Header = BuildStatusHeader(
                 "20min20s",
                 Application.Current.Resources["Lang_EffectiveUsageUntilNextBreak"]?.ToString(),
-                System.Windows.Media.Color.FromRgb(14, 165, 164));
+                System.Windows.Media.Color.FromRgb(203, 166, 247));
             //托盘菜单项
             menuItem_Statistic = new MenuItem();
-            menuItem_Statistic.Header = Application.Current.Resources["Lang_Statistics"];
-            menuItem_Statistic.Icon = CreateMenuGlyph("\xE9D2");
+            menuItem_Statistic.Header = BuildActionHeader(
+                Application.Current.Resources["Lang_Statistics"]?.ToString(),
+                Application.Current.Resources["Lang_StatisticsWindow"]?.ToString(),
+                "\xE9D2",
+                System.Windows.Media.Color.FromRgb(203, 166, 247));
             menuItem_Statistic.Visibility = config.options.General.Data ? Visibility.Visible : Visibility.Collapsed;
             menuItem_Statistic.Click += menuItem_Statistic_Click;
 
             menuItem_Options = new MenuItem();
-            menuItem_Options.Header = Application.Current.Resources["Lang_Settings"];
-            menuItem_Options.Icon = CreateMenuGlyph("\xE713");
+            menuItem_Options.Header = BuildActionHeader(
+                Application.Current.Resources["Lang_Settings"]?.ToString(),
+                Application.Current.Resources["Lang_Optionupdated"]?.ToString(),
+                "\xE713",
+                System.Windows.Media.Color.FromRgb(203, 166, 247));
             menuItem_Options.Click += menuItem_Options_Click;
 
 
             menuItem_NoReset = new MenuItem();
-            menuItem_NoReset.Header = Application.Current.Resources["Lang_Suspendnow"];
-            menuItem_NoReset.Icon = CreateMenuGlyph("\xE769");
+            menuItem_NoReset.Header = BuildActionHeader(
+                Application.Current.Resources["Lang_Suspendnow"]?.ToString(),
+                GetNoResetMenuSummary(),
+                "\xE769",
+                System.Windows.Media.Color.FromRgb(203, 166, 247),
+                true);
 
             menuItem_NoReset_OneHour = new MenuItem();
             menuItem_NoReset_OneHour.Header = Application.Current.Resources["Lang_Onehours"];
+            menuItem_NoReset_OneHour.Icon = CreateMenuGlyph("\xE121");
             menuItem_NoReset_OneHour.Click += MenuItem_NoReset_OneHour_Click;
             menuItem_NoReset_TwoHour = new MenuItem();
             menuItem_NoReset_TwoHour.Header = Application.Current.Resources["Lang_Twohours"];
+            menuItem_NoReset_TwoHour.Icon = CreateMenuGlyph("\xE121");
             menuItem_NoReset_TwoHour.Click += MenuItem_NoReset_TwoHour_Click;
             menuItem_NoReset_Forver = new MenuItem();
             menuItem_NoReset_Forver.Header = Application.Current.Resources["Lang_Suspenduntilnextstartup"];
+            menuItem_NoReset_Forver.Icon = CreateMenuGlyph("\xE823");
             menuItem_NoReset_Forver.Click += MenuItem_NoReset_Forver_Click;
             menuItem_NoReset_Off = new MenuItem();
             menuItem_NoReset_Off.Header = Application.Current.Resources["Lang_Disabled"];
+            menuItem_NoReset_Off.Icon = CreateMenuGlyph("\xE711");
             menuItem_NoReset_Off.IsChecked = true;
             menuItem_NoReset_Off.Click += MenuItem_NoReset_Off_Click;
 
@@ -306,8 +320,11 @@ namespace ProjectEye.Core.Service
             menuItem_NoReset.Items.Add(menuItem_NoReset_Off);
 
             menuItem_Quit = new MenuItem();
-            menuItem_Quit.Header = Application.Current.Resources["Lang_Quit"]; ;
-            menuItem_Quit.Icon = CreateMenuGlyph("\xE8BB");
+            menuItem_Quit.Header = BuildActionHeader(
+                Application.Current.Resources["Lang_Quit"]?.ToString(),
+                "20min20s",
+                "\xE8BB",
+                System.Windows.Media.Color.FromRgb(248, 113, 113));
             menuItem_Quit.Click += menuItem_Exit_Click;
 
             //添加托盘菜单项
@@ -414,7 +431,7 @@ namespace ProjectEye.Core.Service
 
             string statusTitle = "20min20s";
             string statusDetail = string.Empty;
-            System.Windows.Media.Color accentColor = System.Windows.Media.Color.FromRgb(14, 165, 164);
+            System.Windows.Media.Color accentColor = System.Windows.Media.Color.FromRgb(203, 166, 247);
 
             if (config.options.General.IsTomatoMode)
             {
@@ -422,7 +439,7 @@ namespace ProjectEye.Core.Service
                 SetText("20min20s");
                 statusTitle = Application.Current.Resources["Lang_TomatoTimer"]?.ToString();
                 statusDetail = Application.Current.Resources["Lang_Tomato"]?.ToString();
-                accentColor = System.Windows.Media.Color.FromRgb(249, 115, 22);
+                accentColor = System.Windows.Media.Color.FromRgb(203, 166, 247);
                 UpdateStatusMenu(statusTitle, statusDetail, accentColor);
                 return;
             }
@@ -433,7 +450,7 @@ namespace ProjectEye.Core.Service
                 SetText($"20min20s: {Application.Current.Resources["Lang_Reminderisoff"]}");
                 statusTitle = Application.Current.Resources["Lang_Reminderisoff"]?.ToString();
                 statusDetail = GetNoResetDetail();
-                accentColor = System.Windows.Media.Color.FromRgb(245, 158, 11);
+                accentColor = System.Windows.Media.Color.FromRgb(203, 166, 247);
                 UpdateStatusMenu(statusTitle, statusDetail, accentColor);
                 return;
             }
@@ -445,7 +462,7 @@ namespace ProjectEye.Core.Service
                     SetText($"20min20s: {Application.Current.Resources["Lang_PausedDueToInactivity"]}");
                     statusTitle = Application.Current.Resources["Lang_PausedDueToInactivity"]?.ToString();
                     statusDetail = FormatRemainingTime(mainService.GetRestCountdownMinutes());
-                    accentColor = System.Windows.Media.Color.FromRgb(99, 102, 241);
+                    accentColor = System.Windows.Media.Color.FromRgb(203, 166, 247);
                     UpdateStatusMenu(statusTitle, statusDetail, accentColor);
                     return;
                 case RuntimeStatus.DeferredBreak:
@@ -453,7 +470,7 @@ namespace ProjectEye.Core.Service
                     SetText($"20min20s: {Application.Current.Resources["Lang_BreakReminderPending"]}");
                     statusTitle = Application.Current.Resources["Lang_BreakReminderPending"]?.ToString();
                     statusDetail = Application.Current.Resources["Lang_Breaktimeisstartingsoon"]?.ToString();
-                    accentColor = System.Windows.Media.Color.FromRgb(239, 68, 68);
+                    accentColor = System.Windows.Media.Color.FromRgb(203, 166, 247);
                     UpdateStatusMenu(statusTitle, statusDetail, accentColor);
                     return;
                 default:
@@ -469,7 +486,7 @@ namespace ProjectEye.Core.Service
                         statusDetail = string.Empty;
                         SetText("20min20s");
                     }
-                    accentColor = System.Windows.Media.Color.FromRgb(14, 165, 164);
+                    accentColor = System.Windows.Media.Color.FromRgb(203, 166, 247);
                     UpdateStatusMenu(statusTitle, statusDetail, accentColor);
                     return;
             }
@@ -525,23 +542,39 @@ namespace ProjectEye.Core.Service
             }
 
             menuItem_Status.Header = BuildStatusHeader(title, detail, accentColor);
+            if (menuItem_NoReset != null)
+            {
+                menuItem_NoReset.Header = BuildActionHeader(
+                    Application.Current.Resources["Lang_Suspendnow"]?.ToString(),
+                    GetNoResetMenuSummary(),
+                    "\xE769",
+                    System.Windows.Media.Color.FromRgb(166, 227, 161),
+                    true);
+            }
         }
 
         private object BuildStatusHeader(string title, string detail, System.Windows.Media.Color accentColor)
         {
             System.Windows.Media.Brush accentBrush = new System.Windows.Media.SolidColorBrush(accentColor);
-            System.Windows.Media.Brush surfaceBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(28, accentColor.R, accentColor.G, accentColor.B));
-            System.Windows.Media.Brush borderBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(72, accentColor.R, accentColor.G, accentColor.B));
-            System.Windows.Media.Brush titleBrush = GetBrushResource("FontBrush", System.Windows.Media.Brushes.Black);
+            System.Windows.Media.Brush surfaceBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(30, 30, 46));
+            System.Windows.Media.Brush titleBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(205, 214, 244));
             System.Windows.Media.Brush detailBrush = GetBrushWithOpacity(titleBrush, 0.72);
-
-            var brandText = new TextBlock
+            var shell = new Grid
             {
-                Text = "20min20s",
-                FontSize = 11,
-                FontWeight = FontWeights.SemiBold,
-                Foreground = accentBrush
+                ClipToBounds = true
             };
+
+            var topStrip = new Grid
+            {
+                Height = 3,
+                Background = accentBrush,
+                Margin = new Thickness(0),
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+
+            var headerGrid = new Grid();
+            headerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
             var titleText = new TextBlock
             {
@@ -549,11 +582,12 @@ namespace ProjectEye.Core.Service
                 FontSize = 15,
                 FontWeight = FontWeights.Bold,
                 Foreground = titleBrush,
-                TextWrapping = TextWrapping.Wrap
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 10, 0, 0)
             };
 
             var content = new StackPanel();
-            content.Children.Add(brandText);
+            content.Children.Add(headerGrid);
             content.Children.Add(titleText);
 
             if (!string.IsNullOrWhiteSpace(detail))
@@ -561,23 +595,111 @@ namespace ProjectEye.Core.Service
                 content.Children.Add(new TextBlock
                 {
                     Text = detail,
-                    Margin = new Thickness(0, 4, 0, 0),
-                    FontSize = 12,
+                    Margin = new Thickness(0, 6, 0, 0),
+                    FontSize = 11,
                     Foreground = detailBrush,
                     TextWrapping = TextWrapping.Wrap
                 });
             }
 
-            return new Border
+            var contentContainer = new Border
             {
-                Margin = new Thickness(8, 8, 8, 4),
-                Padding = new Thickness(12, 10, 12, 10),
-                CornerRadius = new CornerRadius(10),
-                Background = surfaceBrush,
-                BorderBrush = borderBrush,
-                BorderThickness = new Thickness(1),
+                Margin = new Thickness(0, 3, 0, 0),
+                Padding = new Thickness(14, 12, 14, 12),
                 Child = content
             };
+            shell.Children.Add(topStrip);
+            shell.Children.Add(contentContainer);
+
+            return new Border
+            {
+                Margin = new Thickness(8, 8, 8, 6),
+                CornerRadius = new CornerRadius(16),
+                Background = surfaceBrush,
+                BorderThickness = new Thickness(0),
+                ClipToBounds = true,
+                Child = shell
+            };
+        }
+
+        private object BuildActionHeader(string title, string subtitle, string glyph, System.Windows.Media.Color accentColor, bool showChevron = false)
+        {
+            var accentBrush = new System.Windows.Media.SolidColorBrush(accentColor);
+            var titleBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(205, 214, 244));
+            var subtitleBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(166, 173, 200));
+
+            var layout = new Grid();
+            layout.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+            layout.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            if (showChevron)
+            {
+                layout.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+            }
+
+            var iconBox = new Border
+            {
+                Width = 26,
+                Height = 26,
+                CornerRadius = new CornerRadius(8),
+                Background = System.Windows.Media.Brushes.Transparent,
+                VerticalAlignment = VerticalAlignment.Center,
+                Child = new TextBlock
+                {
+                    Text = glyph,
+                    FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
+                    FontSize = 15,
+                    Foreground = accentBrush,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextAlignment = TextAlignment.Center
+                }
+            };
+
+            var textStack = new StackPanel
+            {
+                Margin = new Thickness(12, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            textStack.Children.Add(new TextBlock
+            {
+                Text = title,
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                Foreground = titleBrush
+            });
+
+            if (!string.IsNullOrWhiteSpace(subtitle))
+            {
+                textStack.Children.Add(new TextBlock
+                {
+                    Text = subtitle,
+                    Margin = new Thickness(0, 1, 0, 0),
+                    FontSize = 11,
+                    Foreground = subtitleBrush,
+                    TextWrapping = TextWrapping.Wrap
+                });
+            }
+
+            layout.Children.Add(iconBox);
+            Grid.SetColumn(textStack, 1);
+            layout.Children.Add(textStack);
+
+            if (showChevron)
+            {
+                var chevron = new TextBlock
+                {
+                    Text = "\xE76C",
+                    FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
+                    FontSize = 11,
+                    Foreground = subtitleBrush,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(10, 0, 0, 0)
+                };
+                Grid.SetColumn(chevron, 2);
+                layout.Children.Add(chevron);
+            }
+
+            return layout;
         }
 
         private TextBlock CreateMenuGlyph(string glyph)
@@ -586,10 +708,11 @@ namespace ProjectEye.Core.Service
             {
                 Text = glyph,
                 FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
-                FontSize = 13,
-                Foreground = GetBrushResource("ThemeBrush", System.Windows.Media.Brushes.DodgerBlue),
+                FontSize = 12,
+                Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(173, 183, 214)),
                 VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Center,
+                TextAlignment = TextAlignment.Center
             };
         }
 
@@ -624,6 +747,13 @@ namespace ProjectEye.Core.Service
             }
 
             return restStr;
+        }
+
+        private string GetNoResetMenuSummary()
+        {
+            return config.options.General.Noreset
+                ? GetNoResetDetail()
+                : Application.Current.Resources["Lang_Disabled"]?.ToString();
         }
 
         /// <summary>

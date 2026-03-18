@@ -13,6 +13,10 @@ namespace ProjectEye.Core.Models.Options
         /// 提醒内容
         /// </summary>
         public string TipContent { get; set; }
+        /// <summary>
+        /// 休息提示界面样式
+        /// </summary>
+        public ComboxModel TipWindowStyleVariant { get; set; } = new ComboxModel() { DisplayName = "平衡默认", Value = "balanced" };
 
         /// <summary>
         /// 是否启用预提醒

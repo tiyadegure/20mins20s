@@ -6,8 +6,11 @@
     <converter:StringConverter x:Key="StringConverter"/>
     <Style TargetType="{x:Type controls:CompareView}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="#d9d9d9" />
-
+        <Setter Property="Foreground" Value="#A6ADC8" />
+        <Setter Property="UPColor" Value="#F38BA8" />
+        <Setter Property="DownColor" Value="#A6E3A1" />
+        <Setter Property="NoChangeColor" Value="#A6ADC8" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
@@ -22,23 +25,27 @@
                             >
                             <Border
                                 x:Name="PopupBorder"
-                                Background="{DynamicResource WindowBackground}"
-                                BorderBrush="{DynamicResource WindowBorderBrush}"
+                                Background="#1E1E2E"
+                                BorderBrush="#313244"
                                 BorderThickness="1"
-                                Padding="10"
+                                Padding="12,10"
                                 Margin="15"
+                                CornerRadius="14"
                                 >
                                 <Border.Effect>
-                                    <DropShadowEffect BlurRadius="5" Opacity="0.2"  ShadowDepth="1"/>
+                                    <DropShadowEffect BlurRadius="16" Opacity="0.28" ShadowDepth="0" Color="#05070B"/>
                                 </Border.Effect>
                                 <Grid>
-                                    <TextBlock x:Name="PopupText"/>
+                                    <TextBlock x:Name="PopupText"
+                                               Foreground="#CDD6F4"
+                                               TextWrapping="Wrap"
+                                               MaxWidth="220"/>
                                     <Path 
                       Width="15"
                       Height="15"
                       SnapsToDevicePixels="False"
-                      Data="M 0 0 L 7.5 7.5 L 15 0" Fill="{DynamicResource WindowBackground}"
-                                        Stroke="{DynamicResource WindowBorderBrush}"
+                      Data="M 0 0 L 7.5 7.5 L 15 0" Fill="#1E1E2E"
+                                        Stroke="#313244"
                                         StrokeThickness="1"
                                         VerticalAlignment="Bottom"
                                         HorizontalAlignment="Left"
@@ -52,16 +59,22 @@
                             x:Name="Border"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        Background="{TemplateBinding Background}">
+                        Background="{TemplateBinding Background}"
+                        Padding="0">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{TemplateBinding DataB,Converter={StaticResource StringConverter}}"
-                                       FontSize="26" FontWeight="Bold" Margin="0,0,10,0"/>
+                                       FontSize="26" FontWeight="Bold" Margin="0,0,10,0" Foreground="#CDD6F4"/>
                                 <TextBlock x:Name="UPIcon" FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEECC;" Margin="0,5,0,0" FontSize="10" Visibility="Collapsed" Foreground="{TemplateBinding UPColor}"/>
                                 <TextBlock x:Name="DownIcon" FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEECD;" Margin="0,5,0,0" FontSize="10" Visibility="Collapsed" Foreground="{TemplateBinding DownColor}"/>
                                 <TextBlock x:Name="NoCIcon" FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEC11;" Margin="0,5,0,0" FontSize="10" Visibility="Collapsed" Foreground="{TemplateBinding NoChangeColor}"/>
-                                <TextBlock x:Name="DiffValue" Margin="5,0,0,0" FontSize="14" Foreground="{TemplateBinding Foreground}">
-                                <Run Text="{TemplateBinding DiffValue,Converter={StaticResource StringConverter}}"/><Run Text="%"/>
-                                </TextBlock>
+                                <Border Margin="8,0,0,0"
+                                        Padding="8,4"
+                                        CornerRadius="8"
+                                        Background="#313244">
+                                    <TextBlock x:Name="DiffValue" FontSize="13" Foreground="{TemplateBinding Foreground}" FontWeight="SemiBold">
+                                        <Run Text="{TemplateBinding DiffValue,Converter={StaticResource StringConverter}}"/><Run Text="%"/>
+                                    </TextBlock>
+                                </Border>
 
                             </StackPanel>
                         </Border>
@@ -72,6 +85,7 @@
                                 <Condition Property="IsMouseOver" Value="True" />
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Popup" Property="IsOpen" Value="true"/>
+                            <Setter TargetName="DiffValue" Property="Foreground" Value="#CDD6F4"/>
                         </MultiTrigger>
                         <Trigger Property="DiffValueStatus" Value="Up">
                             <Setter TargetName="UPIcon" Property="Visibility" Value="Visible" />

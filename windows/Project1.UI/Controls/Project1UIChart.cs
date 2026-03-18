@@ -153,6 +153,7 @@ namespace Project1.UI.Controls
 
         public void DrawText(DrawingContext dc, string text, Point point)
         {
+            double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
 
             dc.DrawText(
                new FormattedText(text,
@@ -160,7 +161,8 @@ namespace Project1.UI.Controls
                   FlowDirection.LeftToRight,
                   new Typeface("Verdana"),
                   12,
-                  new SolidColorBrush((Color)ColorConverter.ConvertFromString("#464646"))),
+                  new SolidColorBrush((Color)ColorConverter.ConvertFromString("#464646")),
+                  pixelsPerDip),
                  point);
 
 

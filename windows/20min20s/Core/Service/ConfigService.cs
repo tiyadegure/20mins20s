@@ -98,6 +98,7 @@ namespace ProjectEye.Core.Service
             options.Style = new StyleModel();
             options.Style.Theme = systemResources.Themes[0];
             options.Style.TipContent = "你已经连续看屏幕 {t} 分钟了。";
+            options.Style.TipWindowStyleVariant = systemResources.TipWindowStyles[0];
             options.Style.TipWindowAnimation = systemResources.Animations[0];
             options.Style.Language = systemResources.Languages[0];
 

@@ -50,6 +50,10 @@
     <sys:String x:Key="Lang_Fadeinandfadeout">渐出渐隐</sys:String>
     <sys:String x:Key="Lang_Fullscreennotificationappearance">全屏提示界面</sys:String>
     <sys:String x:Key="Lang_Customize">自定义</sys:String>
+    <sys:String x:Key="Lang_TipWindowStylePreset">休息界面样式</sys:String>
+    <sys:String x:Key="Lang_TipWindowStyleBalanced">平衡默认</sys:String>
+    <sys:String x:Key="Lang_TipWindowStylePrivacy">隐私优先</sys:String>
+    <sys:String x:Key="Lang_TipWindowStyleMinimal">极简低打扰</sys:String>
     <sys:String x:Key="Lang_RestNow">开始休息</sys:String>
     <sys:String x:Key="Lang_NotNow">暂时不</sys:String>
     <sys:String x:Key="Lang_TipWindowBadge">护眼休息提醒</sys:String>

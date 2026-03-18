@@ -5,12 +5,12 @@
                     >
     <converter:StringConverter x:Key="StringConverter"/>
     <Style TargetType="{x:Type controls:DatePicker}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="#707070" />
-        <Setter Property="Width" Value="130" />
-        <Setter Property="Height" Value="36" />
-
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="#181825" />
+        <Setter Property="BorderBrush" Value="#45475A" />
+        <Setter Property="Width" Value="156" />
+        <Setter Property="Height" Value="42" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
@@ -25,15 +25,15 @@
                             >
                             <Border
                                 x:Name="PopupBorder"
-                                Background="{DynamicResource WindowBackground}"
-                                BorderBrush="{DynamicResource WindowBorderBrush}"
+                                Background="#1E1E2E"
+                                BorderBrush="#313244"
                                 BorderThickness="1"
-                                Padding="10"
+                                Padding="14"
                                 Margin="15"
-                                CornerRadius="2"
+                                CornerRadius="16"
                                 >
                                 <Border.Effect>
-                                    <DropShadowEffect BlurRadius="5" Opacity="0.2"  ShadowDepth="1"/>
+                                    <DropShadowEffect BlurRadius="18" Opacity="0.3" ShadowDepth="0" Color="#05070B"/>
                                 </Border.Effect>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -42,14 +42,14 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid>
                                         <StackPanel>
-                                            <TextBlock Text="{DynamicResource Lang_Year}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource FontBrush}"/>
+                                            <TextBlock Text="{DynamicResource Lang_Year}" FontWeight="SemiBold" FontSize="13" Foreground="#A6ADC8"/>
                                             <controls:ItemList x:Name="YearsList" Margin="0,5,0,0"/>
                                         </StackPanel>
 
                                     </Grid>
                                     <Grid Grid.Column="1">
                                         <StackPanel>
-                                            <TextBlock Text="{DynamicResource Lang_Monthly}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource FontBrush}"/>
+                                            <TextBlock Text="{DynamicResource Lang_Monthly}" FontWeight="SemiBold" FontSize="13" Foreground="#A6ADC8"/>
                                             <controls:ItemList x:Name="MonthsList" Margin="0,5,0,0"/>
                                         </StackPanel>
 
@@ -74,11 +74,12 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Background="{TemplateBinding Background}"
-                            CornerRadius="18">
+                            CornerRadius="12"
+                            Padding="12,0">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEE93;" VerticalAlignment="Center"  FontSize="14" TextAlignment="Center" Foreground="#ffffff"/>
-                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="1" Foreground="#ffffff" Text="{DynamicResource Lang_Monthly}"/>
-                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="1" Foreground="#ffffff">
+                                <TextBlock FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEE93;" VerticalAlignment="Center"  FontSize="14" TextAlignment="Center" Foreground="#CBA6F7"/>
+                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" Grid.Column="1" Foreground="#A6ADC8" Text="{DynamicResource Lang_Monthly}"/>
+                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" Grid.Column="1" Foreground="#CDD6F4">
                                 <Run Text="{TemplateBinding SelectedYear,Converter={StaticResource StringConverter}}"/> <Run Text="/"/> <Run Text="{TemplateBinding SelectedMonth,Converter={StaticResource StringConverter}}"/>
                                 </TextBlock>
                             </StackPanel>
@@ -91,6 +92,8 @@
                                 <Condition Property="IsMouseOver" Value="True" />
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Popup" Property="IsOpen" Value="true"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#585B70"/>
+                            <Setter TargetName="Border" Property="Background" Value="#1E1E2E"/>
                         </MultiTrigger>
 
                     </ControlTemplate.Triggers>

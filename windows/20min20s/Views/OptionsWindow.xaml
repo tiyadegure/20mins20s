@@ -5,12 +5,813 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectEye.Views"
         xmlns:ui="clr-namespace:Project1.UI.Controls;assembly=Project1.UI"
+        xmlns:cmd="clr-namespace:Project1.UI.Controls.Commands;assembly=Project1.UI"
+        xmlns:converter="clr-namespace:Project1.UI.Controls.Converters;assembly=Project1.UI"
         mc:Ignorable="d"
-        Title="{DynamicResource Lang_Settings}" Height="400" Width="580"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="/20min20s;component/Resources/sunglasses.ico">
+        Title="{DynamicResource Lang_Settings}" Height="760" Width="1040"
+        MinWidth="900" MinHeight="680"
+        MaxWidth="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
+        MaxHeight="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Icon="/20min20s;component/Resources/sunglasses.ico">
     <ui:Project1UIWindow.Resources>
+        <converter:Project1UIIconToUnicodeConverter x:Key="OptionsIconToUnicodeConverter"/>
+        <SolidColorBrush x:Key="OptionsPageBackgroundBrush" Color="#11111B"/>
+        <SolidColorBrush x:Key="OptionsShellBackgroundBrush" Color="#1E1E2E"/>
+        <SolidColorBrush x:Key="OptionsMutedBrush" Color="#A6ADC8"/>
+        <SolidColorBrush x:Key="OptionsNavBackgroundBrush" Color="#181825"/>
+        <SolidColorBrush x:Key="OptionsPanelBackgroundBrush" Color="#1E1E2E"/>
+        <SolidColorBrush x:Key="OptionsAccentBrush" Color="#CBA6F7"/>
+        <SolidColorBrush x:Key="OptionsAccentHoverBrush" Color="#D8BBF8"/>
+        <SolidColorBrush x:Key="OptionsTrackBrush" Color="#313244"/>
+        <SolidColorBrush x:Key="OptionsTrackInactiveBrush" Color="#313244"/>
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource FontBrush}"/>
+            <Setter Property="Foreground" Value="#E8ECF8"/>
+        </Style>
+        <Style TargetType="Hyperlink">
+            <Setter Property="Foreground" Value="#AEBEFF"/>
+        </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
+            <Setter Property="Padding" Value="12,0,34,0"/>
+            <Setter Property="Background" Value="#181825"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#181825"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#181825"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#313244"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#CDD6F4"/>
+            </Style.Resources>
+        </Style>
+        <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+            <Setter Property="Background" Value="#181825"/>
+            <Setter Property="Foreground" Value="#A6ADC8"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#313244"/>
+                    <Setter Property="Foreground" Value="#CDD6F4"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#313244"/>
+                    <Setter Property="Foreground" Value="#CBA6F7"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="#6C7086"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="FlatSliderStyle" TargetType="Slider">
+            <Setter Property="Margin" Value="0,10,0,10"/>
+            <Setter Property="MinHeight" Value="54"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="ToolTipService.IsEnabled" Value="False"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{TemplateBinding Tag}"
+                                           FontSize="14"
+                                           FontWeight="Medium"
+                                           Foreground="#CDD6F4"
+                                           VerticalAlignment="Center"/>
+                                <Border Grid.Column="1"
+                                        Background="#313244"
+                                        BorderThickness="0"
+                                        CornerRadius="8"
+                                        Padding="8,4"
+                                        Margin="10,0,0,0">
+                                    <TextBlock FontSize="13"
+                                               Foreground="#CDD6F4"
+                                               FontWeight="SemiBold">
+                                        <Run Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value, StringFormat=F0}"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ToolTip}"/>
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                            <Grid Grid.Row="1" Height="20" VerticalAlignment="Center">
+                                <Border Height="4"
+                                        CornerRadius="999"
+                                        Background="{StaticResource OptionsTrackBrush}"
+                                        VerticalAlignment="Center"/>
+                                <Track x:Name="PART_Track"
+                                       Minimum="{TemplateBinding Minimum}"
+                                       Maximum="{TemplateBinding Maximum}"
+                                       Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value, Mode=TwoWay}"
+                                       ViewportSize="0"
+                                       IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton Command="Slider.DecreaseLarge"
+                                                      IsTabStop="False"
+                                                      Focusable="False"
+                                                      FocusVisualStyle="{x:Null}"
+                                                      Template="{DynamicResource SliderDecreaseButtonTemplate}"/>
+                                    </Track.DecreaseRepeatButton>
+                                    <Track.Thumb>
+                                        <Thumb Width="14" Height="14" Focusable="False" FocusVisualStyle="{x:Null}" Background="Transparent" BorderThickness="0">
+                                            <Thumb.Template>
+                                                <ControlTemplate TargetType="Thumb">
+                                                    <Border Width="14"
+                                                            Height="14"
+                                                            CornerRadius="7"
+                                                            Background="{StaticResource OptionsAccentBrush}"/>
+                                                </ControlTemplate>
+                                            </Thumb.Template>
+                                        </Thumb>
+                                    </Track.Thumb>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton Command="Slider.IncreaseLarge"
+                                                      IsTabStop="False"
+                                                      Focusable="False"
+                                                      FocusVisualStyle="{x:Null}"
+                                                      Template="{DynamicResource SliderIncreaseButtonTemplate}"/>
+                                    </Track.IncreaseRepeatButton>
+                                </Track>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="SliderDecreaseButtonTemplate" TargetType="RepeatButton">
+            <Border Height="4"
+                    Background="{StaticResource OptionsAccentBrush}"
+                    CornerRadius="999"/>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SliderIncreaseButtonTemplate" TargetType="RepeatButton">
+            <Border Height="4"
+                    Background="Transparent"
+                    CornerRadius="999"/>
+        </ControlTemplate>
+        <Style TargetType="{x:Type ui:Project1UIInput}">
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="SelectionBrush" Value="{DynamicResource InputFocusedBorderBrush}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Width" Value="120" />
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Setter Property="IconSize" Value="12" />
+            <Setter Property="BorderThickness" Value="{DynamicResource InputThickness}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Background" Value="#181825"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="Padding" Value="14,0,14,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:Project1UIInput}">
+                        <Border Name="Border"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0"
+                                        x:Name="Icon"
+                                        Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}">
+                                    <TextBlock x:Name="IconTextBlock"
+                                               Text="{TemplateBinding Icon,Converter={StaticResource OptionsIconToUnicodeConverter}}"
+                                               Foreground="{DynamicResource InputIconForeground}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               FontSize="{TemplateBinding IconSize}" />
+                                </Border>
+                                <Button x:Name="ClearButton"
+                                        ToolTip="{DynamicResource Lang_Emptytheinput}"
+                                        Visibility="Collapsed"
+                                        Grid.Column="3"
+                                        Focusable="False"
+                                        Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                        Style="{DynamicResource WindowSystemButton}"
+                                        Content="&#xE894;"
+                                        Command="{x:Static cmd:Project1UIInputCommands.ClearTextCommand}"/>
+                                <ScrollViewer x:Name="PART_ContentHost"
+                                              Grid.Column="1"
+                                              Panel.ZIndex="2"
+                                              Margin="5,0" />
+                                <TextBlock x:Name="Placeholder"
+                                           Panel.ZIndex="1"
+                                           FontSize="{TemplateBinding FontSize}"
+                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           Grid.Column="1"
+                                           Text="{TemplateBinding Placeholder}"
+                                           Visibility="Collapsed"
+                                           Foreground="{DynamicResource InputIconForeground}"
+                                           Margin="5,0" />
+                                <Button x:Name="FolderButton"
+                                        ToolTip="{DynamicResource Lang_Selectfolder}"
+                                        Visibility="Collapsed"
+                                        Grid.Column="4"
+                                        Command="{x:Static cmd:Project1UIInputCommands.CommonOpenFileDialog}"
+                                        Focusable="False"
+                                        Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                        Style="{DynamicResource WindowSystemButton}">
+                                    <TextBlock Text="&#xE710;" />
+                                </Button>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                    <Condition Property="IsReadOnly" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource InputEnterBorderBrush}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsFocused" Value="True" />
+                                    <Condition Property="IsReadOnly" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource InputFocusedBorderBrush}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsFocused" Value="True" />
+                                    <Condition Property="IsReadOnly" Value="False" />
+                                    <Condition Property="IconAlignment" Value="Left" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ClearButton" Property="Visibility" Value="Visible"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsFocused" Value="True" />
+                                    <Condition Property="IsReadOnly" Value="False" />
+                                    <Condition Property="IconAlignment" Value="Right" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ClearButton" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="Icon" Property="Visibility" Value="Collapsed"/>
+                            </MultiTrigger>
+                            <Trigger Property="Type" Value="FileSelect">
+                                <Setter TargetName="FolderButton" Property="ToolTip" Value="{DynamicResource Lang_Selectfile}" />
+                                <Setter TargetName="FolderButton" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="Type" Value="FolderSelect">
+                                <Setter TargetName="FolderButton" Property="ToolTip" Value="{DynamicResource Lang_Selectfolder}" />
+                                <Setter TargetName="FolderButton" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IconAlignment" Value="Left">
+                                <Setter TargetName="Icon" Property="Grid.Column" Value="0" />
+                            </Trigger>
+                            <Trigger Property="IconAlignment" Value="Right">
+                                <Setter TargetName="Icon" Property="Grid.Column" Value="2" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#bbbbbe" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#bbbbbe" />
+                            </Trigger>
+                            <DataTrigger Binding="{Binding Path=Text, RelativeSource={RelativeSource Mode=Self}}" Value="">
+                                <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="Icon" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource DisableBrush}" />
+                                <Setter Property="Foreground" TargetName="Placeholder" Value="{DynamicResource DisableBrush}" />
+                                <Setter Property="Foreground" TargetName="IconTextBlock" Value="{DynamicResource DisableBrush}" />
+                                <Setter Property="Foreground" TargetName="FolderButton" Value="{DynamicResource DisableBrush}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource DisableBrush}" />
+                            </Trigger>
+                            <Trigger Property="Icon" Value="Null">
+                                <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type ui:Project1UIKeyboardInput}">
+            <Setter Property="Background" Value="#181825" />
+            <Setter Property="SnapsToDevicePixels" Value="False" />
+            <Setter Property="Width" Value="120" />
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="BorderThickness" Value="{DynamicResource InputThickness}"/>
+            <Setter Property="BorderBrush" Value="#313244"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="InputMethod.IsInputMethodEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:Project1UIKeyboardInput}">
+                        <Border x:Name="Border"
+                                CornerRadius="12"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <TextBlock x:Name="PTEXT"
+                                               Text="{TemplateBinding Placeholder}"
+                                               HorizontalAlignment="Center"
+                                               Visibility="Collapsed"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource InputIconForeground}"/>
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Foreground="{TemplateBinding Foreground}"
+                                               Text="{TemplateBinding KeyText}"/>
+                                </Grid>
+                                <Button x:Name="ClearButton"
+                                        ToolTip="清除按键"
+                                        Visibility="Visible"
+                                        Grid.Column="1"
+                                        Focusable="False"
+                                        Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                        Style="{DynamicResource WindowSystemButton}"
+                                        Content="&#xE894;"
+                                        Command="{x:Static cmd:Project1UIInputCommands.ClearTextCommand}"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Path=KeyText, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                <Setter TargetName="PTEXT" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ClearButton" Property="Visibility" Value="Hidden" />
+                            </DataTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource InputEnterBorderBrush}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsFocused" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource InputFocusedBorderBrush}"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="#171D2A"/>
+            <Setter Property="BorderBrush" Value="#2C3550"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#E8ECF8"/>
+            <Setter Property="Padding" Value="6"/>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#E8ECF8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#20283B"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#28324A"/>
+                    <Setter Property="Foreground" Value="#F7F9FF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="#1B2231"/>
+            <Setter Property="Foreground" Value="#C7D0EA"/>
+            <Setter Property="BorderBrush" Value="#2C3550"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style TargetType="TabControl" BasedOn="{StaticResource {x:Type TabControl}}">
+            <Setter Property="TabStripPlacement" Value="Left"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter Property="MinWidth" Value="176"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Padding" Value="18,12"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="Foreground" Value="#AAB2C9"/>
+        </Style>
+        <Style TargetType="{x:Type ui:Toggle}">
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="UseLayoutRounding" Value="True"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:Toggle}">
+                        <Grid Margin="{TemplateBinding Margin}"
+                              SnapsToDevicePixels="True"
+                              UseLayoutRounding="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       x:Name="ToggleLabel"
+                                       Text="{TemplateBinding Text}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,16,0"
+                                       FontSize="14"
+                                       FontWeight="Medium"
+                                       TextWrapping="Wrap"
+                                       TextOptions.TextFormattingMode="Display"
+                                       Foreground="#CDD6F4"/>
+                            <Border x:Name="ToggleTrack"
+                                    Grid.Column="1"
+                                    Width="44"
+                                    Height="24"
+                                    Margin="0,4,0,4"
+                                    Background="#313244"
+                                    BorderBrush="#45475A"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    VerticalAlignment="Center">
+                                <Border x:Name="ToggleThumb"
+                                        Width="16"
+                                        Height="16"
+                                        Margin="3,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        CornerRadius="8"
+                                        Background="#6C7086">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform X="0"/>
+                                    </Border.RenderTransform>
+                                </Border>
+                            </Border>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="On">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="ToggleTrack"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#CBA6F7"
+                                                            Duration="0:0:0.18"/>
+                                            <ColorAnimation Storyboard.TargetName="ToggleTrack"
+                                                            Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                            To="#D8BBF8"
+                                                            Duration="0:0:0.18"/>
+                                            <ColorAnimation Storyboard.TargetName="ToggleThumb"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#1E1E2E"
+                                                            Duration="0:0:0.18"/>
+                                            <DoubleAnimation Storyboard.TargetName="ToggleThumb"
+                                                             Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.X)"
+                                                             To="20"
+                                                             Duration="0:0:0.18"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Off">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="ToggleTrack"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#313244"
+                                                            Duration="0:0:0.18"/>
+                                            <ColorAnimation Storyboard.TargetName="ToggleTrack"
+                                                            Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                            To="#45475A"
+                                                            Duration="0:0:0.18"/>
+                                            <ColorAnimation Storyboard.TargetName="ToggleThumb"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#6C7086"
+                                                            Duration="0:0:0.18"/>
+                                            <DoubleAnimation Storyboard.TargetName="ToggleThumb"
+                                                             Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.X)"
+                                                             To="0"
+                                                             Duration="0:0:0.18"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="EnabledStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="ToggleTrack"
+                                                            Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                            To="#585B70"
+                                                            Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ToggleTrack"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0.45"
+                                                             Duration="0:0:0"/>
+                                            <DoubleAnimation Storyboard.TargetName="ToggleThumb"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0.65"
+                                                             Duration="0:0:0"/>
+                                            <DoubleAnimation Storyboard.TargetName="ToggleLabel"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0.55"
+                                                             Duration="0:0:0"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SidebarTabItemStyle" TargetType="TabItem">
+            <Setter Property="Foreground" Value="#A6ADC8"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="TabBorder"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter x:Name="HeaderHost"
+                                              ContentSource="Header"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
+                                              TextElement.FontSize="14"
+                                              TextElement.FontWeight="SemiBold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="#313244"/>
+                                <Setter Property="Foreground" Value="#CDD6F4"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabBorder" Property="Background" Value="#313244"/>
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#585B70"/>
+                                <Setter Property="Foreground" Value="#CBA6F7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SidebarTabControlStyle" TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="14"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0"
+                                    Background="{StaticResource OptionsNavBackgroundBrush}"
+                                    CornerRadius="18"
+                                    Padding="12">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                              HorizontalScrollBarVisibility="Disabled"
+                                              CanContentScroll="False">
+                                    <ItemsPresenter KeyboardNavigation.TabIndex="1"/>
+                                </ScrollViewer>
+                            </Border>
+                            <Border Grid.Column="2"
+                                    Background="{StaticResource OptionsPanelBackgroundBrush}"
+                                    CornerRadius="18"
+                                    Padding="28,24"
+                                    ClipToBounds="True">
+                                <ContentPresenter x:Name="PART_SelectedContentHost"
+                                                  ContentSource="SelectedContent"
+                                                  Margin="0"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FooterPrimaryButton" TargetType="{x:Type ui:Project1UIButton}" BasedOn="{StaticResource default}">
+            <Setter Property="MinWidth" Value="124"/>
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#CBA6F7"/>
+            <Setter Property="Foreground" Value="#11111B"/>
+            <Setter Property="BorderBrush" Value="#CBA6F7"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:Project1UIButton}">
+                        <Border x:Name="Border"
+                                Background="#CBA6F7"
+                                BorderBrush="#CBA6F7"
+                                BorderThickness="0"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="#11111B"
+                                              TextElement.FontWeight="SemiBold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#D8BBF8"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#D8BBF8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#BFA0E8"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#BFA0E8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FooterSecondaryButton" TargetType="{x:Type ui:Project1UIButton}" BasedOn="{StaticResource basic}">
+            <Setter Property="MinWidth" Value="136"/>
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Background" Value="#313244"/>
+            <Setter Property="BorderBrush" Value="#45475A"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:Project1UIButton}">
+                        <Border x:Name="Border"
+                                Background="#313244"
+                                BorderBrush="#45475A"
+                                BorderThickness="1"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="#CDD6F4"
+                                              TextElement.FontWeight="SemiBold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#3A3D55"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#585B70"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#2A2C3F"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="InlineGhostButton" TargetType="{x:Type ui:Project1UIButton}" BasedOn="{StaticResource basic}">
+            <Setter Property="MinHeight" Value="42"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Background" Value="#313244"/>
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="BorderBrush" Value="#45475A"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ui:Project1UIButton}">
+                        <Border x:Name="Border"
+                                Background="#313244"
+                                BorderBrush="#45475A"
+                                BorderThickness="1"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="#CDD6F4"
+                                              TextElement.FontWeight="SemiBold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#3A3D55"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#585B70"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#2A2C3F"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="4"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#45475A"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent">
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineUpCommand"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Focusable="False"
+                                                  IsTabStop="False"
+                                                  Opacity="0"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Focusable="False"
+                                           Background="Transparent">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Width="4"
+                                                        CornerRadius="2"
+                                                        Background="#45475A"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.LineDownCommand"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Focusable="False"
+                                                  IsTabStop="False"
+                                                  Opacity="0"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Height" Value="4"/>
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TabSectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+        <Style x:Key="TabSectionHintStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource OptionsMutedBrush}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,0,0,22"/>
+        </Style>
+        <Style x:Key="SectionSubTitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#CDD6F4"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,22,0,10"/>
         </Style>
     </ui:Project1UIWindow.Resources>
     <ui:Project1UIWindow.ExtElement>
@@ -32,12 +833,32 @@
             </Border>
         </ui:Project1UIModal>
     </ui:Project1UIWindow.ExtElement>
-    <Grid Margin="5">
-
-        <TabControl Margin="0,0,0,50">
-            <TabItem Header="{DynamicResource Lang_General}">
-                <ScrollViewer>
+    <Grid Background="{StaticResource OptionsPageBackgroundBrush}">
+        <Border Margin="20"
+                Background="{StaticResource OptionsShellBackgroundBrush}"
+                BorderThickness="0"
+                CornerRadius="22">
+            <Grid Margin="18">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+        <TabControl Grid.Row="0" Margin="0,0,0,16" Style="{StaticResource SidebarTabControlStyle}" ItemContainerStyle="{StaticResource SidebarTabItemStyle}">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE713;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_General}"/>
+                    </TextBlock>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="10">
+                        <TextBlock Text="{DynamicResource Lang_General}" Style="{StaticResource TabSectionTitleStyle}"/>
+                        <TextBlock Text="调整工作提醒、自动启动和提示音等基础行为。"
+                                   Style="{StaticResource TabSectionHintStyle}"/>
+                        <TextBlock Text="提醒节奏" Style="{StaticResource SectionSubTitleStyle}"/>
                         
                         <!--<Grid Margin="0,10,0,0">-->
                             <!--<Grid.ColumnDefinitions>
@@ -75,6 +896,7 @@
                             <Slider 
                             Margin="0,0,0,0"
                                 Grid.Row="0"
+                                Style="{StaticResource FlatSliderStyle}"
                                 VerticalAlignment="Center"
                                     Tag="{DynamicResource Lang_Notificationinterval}"
                                 Grid.Column="1" Maximum="420" Minimum="1" SmallChange="1" Value="{Binding Model.Data.General.WarnTime}" ToolTip="{DynamicResource Lang_Minutes}" />
@@ -86,6 +908,7 @@
                             <Slider 
                                 Margin="0,20,0,0"
                                 Grid.Row="1"
+                                Style="{StaticResource FlatSliderStyle}"
                                 Tag="{DynamicResource Lang_Breaktimelength}"
                                 VerticalAlignment="Center"
                                 Grid.Column="1" Maximum="300" Minimum="1" SmallChange="1" Value="{Binding Model.Data.General.RestTime}" ToolTip="{DynamicResource Lang_Seconds}"/>
@@ -113,6 +936,7 @@
                               />
                         <ui:Toggle Text="{DynamicResource Lang_Autostartatboot}" IsChecked="{Binding Model.Data.General.Startup}" Cursor="Hand" Margin="0,20,0,0"/>
                         <ui:Toggle Text="{DynamicResource Lang_Soundforbreakend}" IsChecked="{Binding Model.Data.General.Sound}" Margin="0,20,0,0" Cursor="Hand"/>
+                        <TextBlock Text="提示音" Style="{StaticResource SectionSubTitleStyle}"/>
                         <Grid Margin="0,20,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
@@ -130,7 +954,7 @@
                                              Margin="5,0,0,0"
                                              Content="{DynamicResource Lang_Preview}"
                                              Command="{Binding soundTestCommand}"
-                                             Style="{DynamicResource basic}"/>
+                                             Style="{StaticResource InlineGhostButton}"/>
                         </Grid>
                         <!--<CheckBox Content="离开监听" IsChecked="{Binding Model.Data.General.LeaveListener}" Margin="0,10,0,0" Cursor="Hand" ToolTip="如果你离开了电脑我会停止计时直到你回来，且不需要你进行任何操作哦！"/>-->
                         
@@ -139,9 +963,21 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="{DynamicResource Lang_TomatoTimer}">
-                <ScrollViewer>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE81E;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_TomatoTimer}"/>
+                    </TextBlock>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="10">
+                        <TextBlock Text="{DynamicResource Lang_TomatoTimer}" Style="{StaticResource TabSectionTitleStyle}"/>
+                        <TextBlock Text="配置专注与休息节奏，以及番茄钟开始和结束的提示行为。"
+                                   Style="{StaticResource TabSectionHintStyle}"/>
+                        <TextBlock Text="时间参数" Style="{StaticResource SectionSubTitleStyle}"/>
                         <!--<Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
@@ -155,7 +991,7 @@
                             </Grid.RowDefinitions>-->
 
                             <!--工作时长-->
-                        <Slider Tag="{DynamicResource Lang_Work}"  Maximum="420" Minimum="1" SmallChange="1" Value="{Binding Model.Data.Tomato.WorkMinutes}" ToolTip="{DynamicResource Lang_Minutes}"/>
+                        <Slider Style="{StaticResource FlatSliderStyle}" Tag="{DynamicResource Lang_Work}"  Maximum="420" Minimum="1" SmallChange="1" Value="{Binding Model.Data.Tomato.WorkMinutes}" ToolTip="{DynamicResource Lang_Minutes}"/>
 
                         <!--<TextBlock Grid.Column="0"
                                    Margin="0,0,10,0"
@@ -171,6 +1007,7 @@
                             </TextBlock>-->
                             <!--短休息-->
                         <Slider Margin="0,20,0,0"
+                                Style="{StaticResource FlatSliderStyle}"
                                 Tag="{DynamicResource Lang_Shortbreak}" Maximum="420" Minimum="1" SmallChange="1" Value="{Binding Model.Data.Tomato.ShortRestMinutes}" ToolTip="{DynamicResource Lang_Minutes}"/>
                         <!--<TextBlock 
                                 Grid.Row="1"
@@ -191,6 +1028,7 @@
                             </TextBlock>-->
                             <!--长休息-->
                         <Slider Margin="0,20,0,0"
+                                Style="{StaticResource FlatSliderStyle}"
                                 Tag="{DynamicResource Lang_Longbreak}" Maximum="420" Minimum="1" SmallChange="1" Value="{Binding Model.Data.Tomato.LongRestMinutes}" ToolTip="{DynamicResource Lang_Minutes}"/>
                             <!--<TextBlock 
                                 Grid.Row="2"
@@ -214,6 +1052,7 @@
                         <ui:Toggle Text="{DynamicResource Lang_Tomato_IsEnabledInteractiveModel}" IsChecked="{Binding Model.Data.Tomato.IsEnabledInteractiveModel}" Margin="0,20,0,0" Cursor="Hand"/>
 
                         <!--提示音-->
+                        <TextBlock Text="提示音" Style="{StaticResource SectionSubTitleStyle}"/>
                         <ui:Toggle Text="{DynamicResource Lang_Soundforworksstart}" IsChecked="{Binding Model.Data.Tomato.IsWorkStartSound}" Margin="0,20,0,0" Cursor="Hand"/>
                         <Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
@@ -233,7 +1072,7 @@
                                              Content="{DynamicResource Lang_Preview}"
                                              Command="{Binding soundTestCommand}"
                                                  CommandParameter="2"
-                                             Style="{DynamicResource basic}"/>
+                                             Style="{StaticResource InlineGhostButton}"/>
                         </Grid>
                         <ui:Toggle Text="{DynamicResource Lang_Soundforworksend}" IsChecked="{Binding Model.Data.Tomato.IsWorkEndSound}" Margin="0,20,0,0" Cursor="Hand"/>
                         <Grid Margin="0,10,0,0">
@@ -254,14 +1093,26 @@
                                              Content="{DynamicResource Lang_Preview}"
                                              Command="{Binding soundTestCommand}"
                                                  CommandParameter="3"
-                                             Style="{DynamicResource basic}"/>
+                                             Style="{StaticResource InlineGhostButton}"/>
                         </Grid>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="{DynamicResource Lang_Display}">
-                <ScrollViewer>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE7F4;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_Display}"/>
+                    </TextBlock>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="10">
+                        <TextBlock Text="{DynamicResource Lang_Display}" Style="{StaticResource TabSectionTitleStyle}"/>
+                        <TextBlock Text="统一调整主题、语言、休息页样式和数据窗口展示资源。"
+                                   Style="{StaticResource TabSectionHintStyle}"/>
+                        <TextBlock Text="界面与主题" Style="{StaticResource SectionSubTitleStyle}"/>
                         <Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
@@ -324,15 +1175,25 @@
                             <TextBlock 
                                 Grid.Row="3"
                                 Grid.Column="0"
-                                   Margin="0,0,10,0" VerticalAlignment="Center" Text="{DynamicResource Lang_Fullscreennotificationappearance}"></TextBlock>
-                            <ui:Project1UIButton 
+                                   Margin="0,0,10,0" VerticalAlignment="Center" Text="{DynamicResource Lang_TipWindowStylePreset}"></TextBlock>
+                            <StackPanel
                                 Grid.Row="3"
                                 Grid.Column="1"
+                                Orientation="Horizontal">
+                                <ComboBox
+                                    Width="170"
+                                    VerticalAlignment="Center"
+                                    ItemsSource="{Binding Model.TipWindowStyles}"
+                                    DisplayMemberPath="DisplayName"
+                                    SelectedItem="{Binding Model.Data.Style.TipWindowStyleVariant}"/>
+                                <ui:Project1UIButton
+                                             Margin="10,0,0,0"
                                              Content="{DynamicResource Lang_Customize}"
                                              Command="{Binding openWindowCommand}"
                                                  CommandParameter="TipViewDesignWindow"
                                                  HorizontalAlignment="Left"
                                              Style="{DynamicResource basic}"/>
+                            </StackPanel>
                         </Grid>
 
                         <ui:Toggle Text="{DynamicResource Lang_Switchtodarkthemeautomatically}" IsChecked="{Binding Model.IsAutoDark}" Cursor="Hand" Margin="0,10,0,0" />
@@ -374,7 +1235,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <Slider Grid.Column="0" Maximum="60" Minimum="3" SmallChange="1" Value="{Binding Model.Data.Style.PreAlertTime}" ToolTip="{DynamicResource Lang_Seconds}"/>
+                                        <Slider Grid.Column="0" Style="{StaticResource FlatSliderStyle}" Maximum="60" Minimum="3" SmallChange="1" Value="{Binding Model.Data.Style.PreAlertTime}" ToolTip="{DynamicResource Lang_Seconds}"/>
                                         <!--<TextBlock Grid.Column="2" Margin="10,0,0,0">
                                             <Run Text="{Binding Model.Data.Style.PreAlertTime}"/>
                                             <Run Text="{DynamicResource Lang_Seconds}"/>
@@ -492,8 +1353,18 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="{DynamicResource Lang_Hotkeys}">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE765;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_Hotkeys}"/>
+                    </TextBlock>
+                </TabItem.Header>
                 <StackPanel Margin="10">
+                    <TextBlock Text="{DynamicResource Lang_Hotkeys}" Style="{StaticResource TabSectionTitleStyle}"/>
+                    <TextBlock Text="为开始休息和跳过休息设置全局快捷键。"
+                               Style="{StaticResource TabSectionHintStyle}"/>
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -506,7 +1377,7 @@
                         <!--进入休息-->
                         <TextBlock Grid.Column="0"
                                    Margin="0,0,10,0" VerticalAlignment="Center" Text="{DynamicResource Lang_Startthebreak}"></TextBlock>
-                        <ui:Project1UIKeyboardInput Grid.Column="1" Width="auto" KeyText="{Binding Model.Data.KeyboardShortcuts.Reset,Mode=TwoWay}" Placeholder="{DynamicResource Lang_Pleasepressakey}"/>
+                        <ui:Project1UIKeyboardInput Grid.Column="1" Width="220" KeyText="{Binding Model.Data.KeyboardShortcuts.Reset,Mode=TwoWay}" Placeholder="{DynamicResource Lang_Pleasepressakey}" HorizontalAlignment="Left"/>
                         <!--跳过休息-->
                         <TextBlock 
                             Grid.Row="1"
@@ -514,17 +1385,30 @@
                                    Margin="0,0,10,0" VerticalAlignment="Center" Text="{DynamicResource Lang_Skipthebreak}"></TextBlock>
                         <ui:Project1UIKeyboardInput 
                             Grid.Row="1"
-                            Grid.Column="1" Width="auto" KeyText="{Binding Model.Data.KeyboardShortcuts.NoReset,Mode=TwoWay}" Placeholder="{DynamicResource Lang_Pleasepressakey}"/>
+                            Grid.Column="1" Width="220" KeyText="{Binding Model.Data.KeyboardShortcuts.NoReset,Mode=TwoWay}" Placeholder="{DynamicResource Lang_Pleasepressakey}" HorizontalAlignment="Left"/>
                     </Grid>
 
                 </StackPanel>
             </TabItem>
-            <TabItem Header="{DynamicResource Lang_Behaviors}">
-                <ScrollViewer>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE7C3;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_Behaviors}"/>
+                    </TextBlock>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="10">
+                        <TextBlock Text="{DynamicResource Lang_Behaviors}" Style="{StaticResource TabSectionTitleStyle}"/>
+                        <TextBlock Text="控制全屏不打扰、空闲暂停和跳过限制等运行时行为。"
+                                   Style="{StaticResource TabSectionHintStyle}"/>
+                        <TextBlock Text="运行策略" Style="{StaticResource SectionSubTitleStyle}"/>
                         <ui:Toggle Text="{DynamicResource Lang_HandleTimeoutAutoRest}" IsChecked="{Binding Model.Data.Behavior.IsHandleTimeoutRest}" Cursor="Hand" Margin="0,20,0,0" />
                         <ui:Toggle Text="{DynamicResource Lang_Breakscannotbeskipped}"  IsChecked="{Binding Model.Data.Behavior.IsDisabledSkip}" Cursor="Hand" Margin="0,10,0,0"/>
                         <Slider Margin="0,20,0,0"
+                                Style="{StaticResource FlatSliderStyle}"
                                 Tag="{DynamicResource Lang_IdlePauseSeconds}"
                                 Maximum="300"
                                 Minimum="5"
@@ -533,6 +1417,7 @@
                                 ToolTip="{DynamicResource Lang_Seconds}"/>
                         <ui:Toggle Text="{DynamicResource Lang_Donotdisturbwhenrunningfullscreenapplications}"  IsChecked="{Binding Model.Data.Behavior.IsFullScreenBreak}" Cursor="Hand" Margin="0,20,0,0"/>
                         <Slider Margin="0,20,0,0"
+                                Style="{StaticResource FlatSliderStyle}"
                                 Tag="{DynamicResource Lang_DeferredBreakReminderDelaySeconds}"
                                 Maximum="15"
                                 Minimum="0"
@@ -540,6 +1425,7 @@
                                 Value="{Binding Model.Data.Behavior.DeferredBreakReminderDelaySeconds}"
                                 ToolTip="{DynamicResource Lang_Seconds}"/>
                         <ui:Toggle Text="{DynamicResource Lang_Donotdisturbwhenfollowingprocessesarerunning}" IsChecked="{Binding Model.IsBreakProgressList,Mode=TwoWay}" Cursor="Hand" Margin="0,20,0,0" />
+                        <TextBlock Text="进程白名单" Style="{StaticResource SectionSubTitleStyle}"/>
                         <Grid Margin="0,10,0,0" Visibility="{Binding Model.BreakProgressListVisibility}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
@@ -548,6 +1434,7 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <ui:Project1UIInput
@@ -567,6 +1454,16 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
                 Style="{DynamicResource basic}"/>
+                                <ui:Project1UIButton
+                                Grid.Column="2"
+                                Margin="10,0,0,0"
+                                Command="{Binding removeBreackProcessCommand}"
+                                Content="{DynamicResource Lang_Remove}"
+                                MinHeight="23"
+                                MinWidth="85"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                Style="{StaticResource InlineGhostButton}"/>
                             </Grid>
                             <ListView
             Grid.Row="1"
@@ -578,7 +1475,7 @@
            >
 
                                 <ListView.ContextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
                                         <MenuItem Header="{DynamicResource Lang_Remove}"  Command="{Binding removeBreackProcessCommand}"/>
                                     </ContextMenu>
                                 </ListView.ContextMenu>
@@ -610,9 +1507,21 @@
                 </ScrollViewer>
             </TabItem>
 
-            <TabItem Header="{DynamicResource Lang_About}">
-                <ScrollViewer>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <Run FontFamily="Segoe MDL2 Assets" Text="&#xE946;"/>
+                        <Run Text="  "/>
+                        <Run Text="{DynamicResource Lang_About}"/>
+                    </TextBlock>
+                </TabItem.Header>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="10">
+                        <TextBlock Text="{DynamicResource Lang_About}" Style="{StaticResource TabSectionTitleStyle}"/>
+                        <TextBlock Text="查看版本、文档、贡献者和项目仓库入口。"
+                                   Style="{StaticResource TabSectionHintStyle}"/>
+                        <TextBlock Text="项目信息" Style="{StaticResource SectionSubTitleStyle}"/>
                         <Image RenderTransformOrigin="0.5,0.5" Source="/20min20s;component/Resources/sunglasses.ico" Height="30" HorizontalAlignment="Left"  Margin="0,10,0,0">
                             <Image.RenderTransform>
                                 <ScaleTransform ScaleX="1" ScaleY="1"/>
@@ -700,29 +1609,34 @@
                 </ScrollViewer>
             </TabItem>
         </TabControl>
+        <Border Grid.Row="1"
+                Background="#181825"
+                BorderThickness="0"
+                CornerRadius="16"
+                Padding="16,14">
         <StackPanel Orientation="Horizontal"
                      HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-                    Margin="10">
+            VerticalAlignment="Bottom">
             <ui:Project1UIButton 
             Command="{Binding inkCommand}"
             Content="{DynamicResource Lang_Createashortcutondesktop}"
-            Padding="10,6"
-                Width="auto"
-                Height="auto"
-                Style="{DynamicResource basic}"/>
+                Style="{StaticResource FooterSecondaryButton}"
+                Background="#313244"
+                Foreground="#CDD6F4"
+                BorderBrush="#45475A"/>
           
             <ui:Project1UIButton 
             Command="{Binding applyCommand}"
             Content="{DynamicResource Lang_Apply}"
-          Padding="10,6"
-                Width="auto"
-                Height="auto"
                 Margin="10,0,0,0"
-                MinWidth="80"
-                Icon="Null"/>
+                Style="{StaticResource FooterPrimaryButton}"
+                Icon="Null"
+                Background="#CBA6F7"
+                Foreground="#11111B"
+                BorderBrush="#CBA6F7"/>
         </StackPanel>
-
-
+        </Border>
+            </Grid>
+        </Border>
     </Grid>
 </ui:Project1UIWindow>

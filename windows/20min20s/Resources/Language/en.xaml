@@ -49,6 +49,10 @@
     <sys:String x:Key="Lang_Fadeinandfadeout">Fade in and fade out</sys:String>
     <sys:String x:Key="Lang_Fullscreennotificationappearance">Fullscreen notification appearance</sys:String>
     <sys:String x:Key="Lang_Customize">Customize</sys:String>
+    <sys:String x:Key="Lang_TipWindowStylePreset">Break screen style</sys:String>
+    <sys:String x:Key="Lang_TipWindowStyleBalanced">Balanced default</sys:String>
+    <sys:String x:Key="Lang_TipWindowStylePrivacy">Privacy first</sys:String>
+    <sys:String x:Key="Lang_TipWindowStyleMinimal">Minimal low profile</sys:String>
     <sys:String x:Key="Lang_RestNow">Start break</sys:String>
     <sys:String x:Key="Lang_NotNow">Not now</sys:String>
     <sys:String x:Key="Lang_TipWindowBadge">Eye break reminder</sys:String>

@@ -3,25 +3,25 @@
                     >
     <!--#region 右键菜单样式-->
     <Style  TargetType="{x:Type ContextMenu}">
-        <Setter Property="Background" Value="{DynamicResource WindowBackground}"/>
+        <Setter Property="Background" Value="#1E1E2E"/>
         <!--<Setter Property="BorderBrush" Value="{DynamicResource FluentBorderBrush}"/>-->
         <Setter Property="Padding" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <Grid>
-                        <Border Margin="13" Background="{DynamicResource WindowBackground}" CornerRadius="2">
+                        <Border Margin="10" Background="#1E1E2E" CornerRadius="18">
                             <Border.Effect>
-                                <DropShadowEffect ShadowDepth="0" Direction="0"  BlurRadius="15" Opacity=".3" />
+                                <DropShadowEffect ShadowDepth="0" Direction="0"  BlurRadius="26" Opacity=".38" />
                             </Border.Effect>
                         </Border>
                         <Border x:Name="Border"
-                                Background="{DynamicResource WindowBackground}"
-                                BorderBrush="{DynamicResource WindowBorderBrush}"
+                                Background="#1E1E2E"
+                                BorderBrush="#313244"
                                 BorderThickness="1"
                                 Padding="0"
-                                Margin="10"
-                                CornerRadius="2"
+                                Margin="6"
+                                CornerRadius="18"
                                 >
                             <ScrollViewer Focusable="false" Padding="0">
 

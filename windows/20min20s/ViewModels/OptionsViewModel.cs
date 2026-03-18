@@ -43,6 +43,21 @@ namespace ProjectEye.ViewModels
             Model.Animations = systemResources.Animations;
             Model.PreAlertActions = systemResources.PreAlertActions;
             Model.Languages = systemResources.Languages;
+            Model.TipWindowStyles = systemResources.TipWindowStyles;
+
+            if (Model.Data.Style.TipWindowStyleVariant == null)
+            {
+                Model.Data.Style.TipWindowStyleVariant = systemResources.TipWindowStyles[0];
+            }
+            else
+            {
+                string currentVariant = Model.Data.Style.TipWindowStyleVariant.Value;
+                var matchedVariant = systemResources.TipWindowStyles.Find(m => m.Value == currentVariant);
+                if (matchedVariant != null)
+                {
+                    Model.Data.Style.TipWindowStyleVariant = matchedVariant;
+                }
+            }
 
             string[] version = Assembly.GetExecutingAssembly().GetName().Version.ToString().Split('.');
             Model.Version = version[0] + "." + version[1] + "." + version[2];
@@ -65,7 +80,13 @@ namespace ProjectEye.ViewModels
         /// <param name="obj"></param>
         private void openWindowCommand_action(object obj)
         {
-            string window = obj.ToString();
+            string window = NormalizeCommandParameter(obj);
+            if (string.IsNullOrWhiteSpace(window))
+            {
+                Modal($"{Application.Current.Resources["Lang_Failed"]}");
+                return;
+            }
+
             if (window == "TipViewDesignWindow")
             {
                 WindowManager.CreateWindow(window, true, true);
@@ -83,7 +104,14 @@ namespace ProjectEye.ViewModels
         /// <param name="obj"></param>
         private void removeBreackProcessCommand_action(object obj)
         {
+            if (string.IsNullOrWhiteSpace(Model.SelectedItem))
+            {
+                Modal($"{Application.Current.Resources["Lang_Failed"]}");
+                return;
+            }
+
             Model.Data.Behavior.BreakProgressList.Remove(Model.SelectedItem);
+            Model.SelectedItem = null;
         }
 
         /// <summary>
@@ -92,8 +120,8 @@ namespace ProjectEye.ViewModels
         /// <param name="obj"></param>
         private void addBreackProcessCommand_action(object obj)
         {
-            string process = obj.ToString();
-            if (process == string.Empty)
+            string process = NormalizeCommandParameter(obj)?.Trim();
+            if (string.IsNullOrWhiteSpace(process))
             {
                 Modal($"{Application.Current.Resources["Lang_Pleaseentertheprocessname"]}");
             }
@@ -109,10 +137,16 @@ namespace ProjectEye.ViewModels
 
         private void showWindowCommand_action(object obj)
         {
+            string window = NormalizeCommandParameter(obj);
+            if (string.IsNullOrWhiteSpace(window))
+            {
+                Modal($"{Application.Current.Resources["Lang_Failed"]}");
+                return;
+            }
 
-            WindowManager.CreateWindowInScreen(obj.ToString());
+            WindowManager.CreateWindowInScreen(window);
 
-            WindowManager.Show(obj.ToString());
+            WindowManager.Show(window);
         }
 
         private void updateCommand_action(object obj)
@@ -135,7 +169,7 @@ namespace ProjectEye.ViewModels
         private void soundTestCommand_actionAsync(object obj)
         {
             string path = "";
-            switch (obj.ToString())
+            switch (NormalizeCommandParameter(obj))
             {
                 case "2":
                     path = config.options.Tomato.WorkStartSoundPath;
@@ -171,7 +205,25 @@ namespace ProjectEye.ViewModels
 
         private void openurlCommand_action(object obj)
         {
-            Process.Start(new ProcessStartInfo(obj.ToString()));
+            string target = NormalizeCommandParameter(obj);
+            if (string.IsNullOrWhiteSpace(target))
+            {
+                Modal($"{Application.Current.Resources["Lang_Failed"]}");
+                return;
+            }
+
+            try
+            {
+                Process.Start(new ProcessStartInfo(target)
+                {
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Warning("Open target failed in OptionsViewModel: " + ex.Message);
+                Modal($"{Application.Current.Resources["Lang_Failed"]}");
+            }
         }
 
         private void applyCommand_action(object obj)
@@ -193,6 +245,7 @@ namespace ProjectEye.ViewModels
                 }
                 //处理主题切换
                 theme.SetTheme(config.options.Style.Theme.ThemeName);
+                mainService.CreateTipWindows();
             }
             Modal(msg);
         }
@@ -201,6 +254,12 @@ namespace ProjectEye.ViewModels
         {
             Model.ModalText = text;
             Model.ShowModal = true;
+        }
+
+        private static string NormalizeCommandParameter(object obj)
+        {
+            string value = obj?.ToString();
+            return string.Equals(value, "NULL", StringComparison.OrdinalIgnoreCase) ? string.Empty : value;
         }
     }
 }

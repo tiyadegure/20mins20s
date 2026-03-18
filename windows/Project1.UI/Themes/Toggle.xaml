@@ -17,7 +17,7 @@
                                 <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Border x:Name="Button" Background="{DynamicResource SubBorderBrush}" CornerRadius="10" Padding="5">
+                            <Border x:Name="Button" Background="{DynamicResource SubBrush}" CornerRadius="10" Padding="5">
                                 <Border x:Name="Mark" Width="12" Height="12" CornerRadius="15" Background="{DynamicResource InputBorderBrush}" VerticalAlignment="Center" HorizontalAlignment="Left">
                                     <Border.RenderTransform>
                                         <TranslateTransform X="0"/>
@@ -49,7 +49,7 @@
                                             Storyboard.TargetName="Button"
                                             Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
                                             <EasingColorKeyFrame KeyTime="00:00:0.2"
-                                                                 Value="{DynamicResource PrimaryColor}"/>
+                                                                 Value="{DynamicResource ThemeColor}"/>
                                         </ColorAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>

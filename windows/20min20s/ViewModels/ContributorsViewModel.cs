@@ -22,7 +22,16 @@ namespace ProjectEye.ViewModels
      
         private void openurlCommand_action(object obj)
         {
-            Process.Start(new ProcessStartInfo(obj.ToString()));
+            string url = obj?.ToString();
+            if (string.IsNullOrWhiteSpace(url) || string.Equals(url, "NULL", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo(url)
+            {
+                UseShellExecute = true
+            });
         }
 
     }

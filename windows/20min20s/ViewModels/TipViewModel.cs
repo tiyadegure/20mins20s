@@ -166,14 +166,7 @@ namespace ProjectEye.ViewModels
         private void CreateUI()
         {
             var container = new Grid();
-            string uiFilePath = $"UI\\{config.options.Style.Theme.ThemeName}_{ScreenName}.json";
-            var data = JsonConvert.DeserializeObject<UIDesignModel>(FileHelper.Read(uiFilePath));
-            if (data == null || theme.IsLegacyTipWindowUI(data))
-            {
-                data = theme.GetCreateDefaultTipWindowUI(config.options.Style.Theme.ThemeName, ScreenName);
-
-                FileHelper.Write(uiFilePath, JsonConvert.SerializeObject(data));
-            }
+            var data = theme.LoadOrCreateTipWindowUI(config.options.Style.Theme.ThemeName, ScreenName);
             var containerBG = new Border();
             containerBG.Width = Double.NaN;
             containerBG.Height = Double.NaN;
@@ -439,6 +432,10 @@ namespace ProjectEye.ViewModels
         private void config_Changed(object sender, EventArgs e)
         {
             LoadConfig();
+            if (WindowInstance != null)
+            {
+                CreateUI();
+            }
         }
 
         private void resetCompleted(object sender, int timed)

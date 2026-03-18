@@ -6,6 +6,7 @@
     <converter:StringConverter x:Key="StringConverter"/>
     <Style TargetType="{x:Type controls:ItemList}">
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Width" Value="120" />
         <Setter Property="SnapsToDevicePixels" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
@@ -16,7 +17,8 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Background="{TemplateBinding Background}">
-                            <WrapPanel x:Name="WrapPanel">
+                            <WrapPanel x:Name="WrapPanel"
+                                       Margin="0,4,0,0">
 
                             </WrapPanel>
                         </Border>

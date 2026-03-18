@@ -20,7 +20,7 @@
                                 Background="{TemplateBinding Background}"
                                 >
                         <Border.Effect>
-                            <DropShadowEffect BlurRadius="5" Opacity="0.2"  ShadowDepth="1"/>
+                            <DropShadowEffect BlurRadius="10" Opacity="0.28" ShadowDepth="0" Color="#05070B"/>
                         </Border.Effect>
                         <TextBlock 
                             x:Name="icon"
@@ -29,7 +29,7 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
                                     FontSize="14"
-                                    Foreground="#9e9ea7"
+                                    Foreground="#A6ADC8"
                             Width="14"
                             Height="14"
                             TextAlignment="Center">
@@ -97,8 +97,8 @@
     </Style>
 
     <Style TargetType="{x:Type controls:Chart}">
-        <Setter Property="Background" Value="White" />
-        <Setter Property="Foreground" Value="#323130"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#CDD6F4"/>
         <Setter Property="SnapsToDevicePixels" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
@@ -138,7 +138,7 @@
                                     HorizontalAlignment="Center"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    Foreground="#9e9ea7"/>
+                                    Foreground="#A6ADC8"/>
                             </Border>
                             <!--平均值标注-->
                             <Border
@@ -154,7 +154,7 @@
                                     HorizontalAlignment="Center"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    Foreground="#82D29A"
+                                    Foreground="#A6E3A1"
                                     Text="{TemplateBinding AverageText}">
                                     <!--<TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TickTextConverter}">
@@ -175,7 +175,7 @@
                                     HorizontalAlignment="Center"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    Foreground="#9e9ea7"/>
+                                    Foreground="#A6ADC8"/>
                             </Border>
                         </Grid>
                         <!--主要内容视图-->
@@ -184,7 +184,7 @@
                             <Rectangle 
                            x:Name="MaxTick"
                             Height="2"
-                            Fill="#dddddd"
+                            Fill="#313244"
                             Panel.ZIndex="1"
                             VerticalAlignment="Top"
                                 Margin="0,20,0,0"
@@ -200,17 +200,18 @@
                             >
                                 <Border
                                 x:Name="PopupBorder"
-                                Background="White"
-                                BorderBrush="#ccc"
+                                Background="#1E1E2E"
+                                BorderBrush="#313244"
                                 BorderThickness="1"
-                                Padding="10"
+                                CornerRadius="12"
+                                Padding="12,10"
                                 Margin="15"
                                 >
                                     <Border.Effect>
-                                        <DropShadowEffect BlurRadius="5" Opacity="0.2"  ShadowDepth="1"/>
+                                        <DropShadowEffect BlurRadius="18" Opacity="0.35" ShadowDepth="0" Color="#05070B"/>
                                     </Border.Effect>
                                     <Grid>
-                                            <TextBlock>
+                                            <TextBlock Foreground="#CDD6F4">
                                                 <Run Text="{DynamicResource Lang_Average}"/>
                                                 <Run Text="{TemplateBinding AverageText}"/>
                                             </TextBlock>
@@ -218,8 +219,8 @@
                       Width="15"
                       Height="15"
                       SnapsToDevicePixels="False"
-                      Data="M 0 0 L 7.5 7.5 L 15 0" Fill="White"
-                                        Stroke="#ccc"
+                      Data="M 0 0 L 7.5 7.5 L 15 0" Fill="#1E1E2E"
+                                        Stroke="#313244"
                                         StrokeThickness="1"
                                         VerticalAlignment="Bottom"
                                         HorizontalAlignment="Left"
@@ -250,7 +251,7 @@
                                                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
                                                 Storyboard.TargetName="AverageTick">
                                                     <EasingColorKeyFrame KeyTime="0"
-                                         Value="#4f6bed" />
+                                         Value="#CBA6F7" />
                                                 </ColorAnimationUsingKeyFrames>
 
                                             </Storyboard>
@@ -272,7 +273,7 @@
                                 <Rectangle 
                            x:Name="test"
                             Height="2"
-                            Fill="#82D29A"
+                            Fill="#A6E3A1"
                             RadiusX="2"
                                      RadiusY="2"
                             >
@@ -291,17 +292,18 @@
                                 VerticalOffset="-10"
                             >
                                     <Border
-                                Background="White"
-                                BorderBrush="#ccc"
+                                Background="#1E1E2E"
+                                BorderBrush="#313244"
                                 BorderThickness="1"
-                                Padding="10"
+                                CornerRadius="12"
+                                Padding="12,10"
                                 Margin="15"
                                 >
                                         <Border.Effect>
-                                            <DropShadowEffect BlurRadius="5" Opacity="0.2"  ShadowDepth="1"/>
+                                            <DropShadowEffect BlurRadius="18" Opacity="0.35" ShadowDepth="0" Color="#05070B"/>
                                         </Border.Effect>
                                         <Grid>
-                                            <TextBlock>
+                                            <TextBlock Foreground="#CDD6F4">
                                                 <Run Text="{DynamicResource Lang_Minimum}"/>
                                                 <Run Text="{TemplateBinding MinimumText}"/>
                                             </TextBlock>
@@ -309,8 +311,8 @@
                       Width="15"
                       Height="15"
                       SnapsToDevicePixels="False"
-                      Data="M 0 0 L 7.5 7.5 L 15 0" Fill="White"
-                                        Stroke="#ccc"
+                      Data="M 0 0 L 7.5 7.5 L 15 0" Fill="#1E1E2E"
+                                        Stroke="#313244"
                                         StrokeThickness="1"
                                         VerticalAlignment="Bottom"
                                         HorizontalAlignment="Left"
@@ -340,7 +342,7 @@
                                                     <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
                                                 Storyboard.TargetName="BottomTick">
                                                         <EasingColorKeyFrame KeyTime="0"
-                                         Value="#4f6bed" />
+                                         Value="#CBA6F7" />
                                                     </ColorAnimationUsingKeyFrames>
 
                                                 </Storyboard>
@@ -361,7 +363,7 @@
 
                                     <Rectangle 
                             Height="2"
-                            Fill="#dddddd"
+                            Fill="#313244"
                             RadiusX="2"
                                      RadiusY="2"
                             >
@@ -392,7 +394,7 @@
                             <Button
                                 x:Name="ScrollLeftButton"
                                 Style="{StaticResource ScrollButton}"
-                                Background="White"
+                                Background="#181825"
                                 Visibility="{TemplateBinding ScrollLeftButtonVisibility}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
@@ -402,7 +404,7 @@
                             <Button
                                 x:Name="ScrollRightButton"
                                 Style="{StaticResource ScrollButton}"
-                                Background="White"
+                                Background="#181825"
                                 Visibility="{TemplateBinding ScrollRightButtonVisibility}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Right"
