@@ -24,12 +24,12 @@
                         </Border.Effect>
                         <TextBlock 
                             x:Name="icon"
-                                    FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" 
+                                    FontFamily="Segoe MDL2 Assets"
                                     Text="{TemplateBinding ContentStringFormat}"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
                                     FontSize="14"
-                                    Foreground="#A6ADC8"
+                                    Foreground="#CDD6F4"
                             Width="14"
                             Height="14"
                             TextAlignment="Center">

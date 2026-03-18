@@ -64,9 +64,9 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{TemplateBinding DataB,Converter={StaticResource StringConverter}}"
                                        FontSize="26" FontWeight="Bold" Margin="0,0,10,0" Foreground="#CDD6F4"/>
-                                <TextBlock x:Name="UPIcon" FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEECC;" Margin="0,5,0,0" FontSize="10" Visibility="Collapsed" Foreground="{TemplateBinding UPColor}"/>
-                                <TextBlock x:Name="DownIcon" FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEECD;" Margin="0,5,0,0" FontSize="10" Visibility="Collapsed" Foreground="{TemplateBinding DownColor}"/>
-                                <TextBlock x:Name="NoCIcon" FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEC11;" Margin="0,5,0,0" FontSize="10" Visibility="Collapsed" Foreground="{TemplateBinding NoChangeColor}"/>
+                                <TextBlock x:Name="UPIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE70E;" Margin="0,4,0,0" FontSize="11" Visibility="Collapsed" Foreground="{TemplateBinding UPColor}"/>
+                                <TextBlock x:Name="DownIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE70D;" Margin="0,4,0,0" FontSize="11" Visibility="Collapsed" Foreground="{TemplateBinding DownColor}"/>
+                                <TextBlock x:Name="NoCIcon" Text="-" Margin="0,1,0,0" FontSize="16" Visibility="Collapsed" Foreground="{TemplateBinding NoChangeColor}" FontWeight="SemiBold"/>
                                 <Border Margin="8,0,0,0"
                                         Padding="8,4"
                                         CornerRadius="8"

@@ -672,6 +672,7 @@ namespace Project1.UI.Controls.ChartControl
             Average = averageValue;
 
             double bottomTickMargin = (bottomValue / maxValue) * itemTrueHeight + 30;
+            bool showBottomTick = bottomValue > 0;
 
             double bottomTickY = bottomTickMargin - BottomTick.ActualHeight / 2;
             TranslateTransform averageTransform = new TranslateTransform()
@@ -681,11 +682,18 @@ namespace Project1.UI.Controls.ChartControl
             AverageTick.RenderTransform = averageTransform;
             //AverageTick.Margin = new Thickness(0, 0, 0, averageTickMargin);
             //BottomTick.Margin = new Thickness(0, 0, 0, bottomTickMargin);
-            TranslateTransform bottomTickTransform = new TranslateTransform()
+            if (BottomTick != null)
             {
-                Y = -bottomTickY
-            };
-            BottomTick.RenderTransform = bottomTickTransform;
+                BottomTick.Visibility = showBottomTick ? Visibility.Visible : Visibility.Collapsed;
+                if (showBottomTick)
+                {
+                    TranslateTransform bottomTickTransform = new TranslateTransform()
+                    {
+                        Y = -bottomTickY
+                    };
+                    BottomTick.RenderTransform = bottomTickTransform;
+                }
+            }
 
             //刻度标注
             MaxValueLabel.Text = TickText.Replace("{value}", maxValue.ToString());
@@ -696,9 +704,22 @@ namespace Project1.UI.Controls.ChartControl
                 Y = -averageLabelY
             };
             //AverageLabel.Text = TickText.Replace("{value}", Math.Round(averageValue, 1).ToString());
-            double bottomTickHeight = double.IsNaN(BottomTick.Height) ? 2 : BottomTick.Height;
-            BottomValueBorder.Margin = new Thickness(0, 0, 0, bottomTickMargin - BottomValueBorder.ActualHeight / 2 - bottomTickHeight / 2);
-            BottomValueLabel.Text = TickText.Replace("{value}", bottomValue.ToString());
+            if (BottomValueBorder != null)
+            {
+                BottomValueBorder.Visibility = showBottomTick ? Visibility.Visible : Visibility.Collapsed;
+                if (showBottomTick)
+                {
+                    double bottomTickHeight = BottomTick == null || double.IsNaN(BottomTick.Height) ? 2 : BottomTick.Height;
+                    BottomValueBorder.Margin = new Thickness(0, 0, 0, bottomTickMargin - BottomValueBorder.ActualHeight / 2 - bottomTickHeight / 2);
+                    // Keep the bottom tick minimal. Repeating the unit here makes short charts
+                    // look crowded and can cause the lower label to collide visually with the top tick.
+                    BottomValueLabel.Text = bottomValue.ToString();
+                }
+            }
+            if (!showBottomTick && BottomPopup != null)
+            {
+                BottomPopup.IsOpen = false;
+            }
 
             MinimumText = bottomValue.ToString();
 

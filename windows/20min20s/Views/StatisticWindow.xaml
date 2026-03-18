@@ -107,8 +107,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style TargetType="{x:Type ui:ContentCard}">
+        <Style TargetType="{x:Type ui:ContentCard}" BasedOn="{StaticResource {x:Type ui:ContentCard}}">
             <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         </Style>
         <Style x:Key="StatsSectionTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24"/>
@@ -130,17 +132,20 @@
         </Style>
         <Style x:Key="TopNavTabItemStyle" TargetType="TabItem">
             <Setter Property="Foreground" Value="#A6ADC8"/>
-            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Padding" Value="16,8"/>
             <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="MinHeight" Value="42"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
                         <Border x:Name="TabBorder"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
-                                BorderThickness="1"
+                                BorderThickness="0"
                                 CornerRadius="12"
-                                Padding="{TemplateBinding Padding}">
+                                Padding="{TemplateBinding Padding}"
+                                VerticalAlignment="Center"
+                                SnapsToDevicePixels="True">
                             <ContentPresenter ContentSource="Header"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Center"
@@ -156,7 +161,6 @@
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="TabBorder" Property="Background" Value="#313244"/>
-                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#585B70"/>
                                 <Setter Property="Foreground" Value="#CBA6F7"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -185,7 +189,10 @@
                                     Padding="10">
                                 <TabPanel x:Name="HeaderPanel"
                                           IsItemsHost="True"
-                                          KeyboardNavigation.TabIndex="1"/>
+                                          KeyboardNavigation.TabIndex="1"
+                                          Margin="0"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"/>
                             </Border>
                             <Border Grid.Row="2"
                                     Background="{StaticResource StatsContentSurfaceBrush}"
@@ -194,7 +201,9 @@
                                     CornerRadius="18"
                                     Padding="24">
                                 <ContentPresenter x:Name="PART_SelectedContentHost"
-                                                  ContentSource="SelectedContent"/>
+                                                  ContentSource="SelectedContent"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch"/>
                             </Border>
                         </Grid>
                     </ControlTemplate>
@@ -623,7 +632,7 @@
                     </Grid.Background>-->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,4">
@@ -631,7 +640,7 @@
                         <TextBlock Text="按月份回看累计工作、休息、跳过和番茄时钟数据，支持导出当月记录。"
                                    Style="{StaticResource StatsSectionHintStyle}"/>
                     </StackPanel>
-                    <Grid Grid.Row="2" VerticalAlignment="Center"  Grid.ColumnSpan="2" Margin="0,0,0,10">
+                    <Grid Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -653,7 +662,7 @@
                 Foreground="#CDD6F4"
                 BorderBrush="#45475A"/>
                     </Grid>
-                    <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2" Margin="0,56,0,0">
+                    <ScrollViewer Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0">
                         <StackPanel Margin="8,12,8,8">
                             <ui:ContentCard Padding="24" Background="#23263A" BorderBrush="#313244" BorderThickness="1">
                                 <StackPanel>

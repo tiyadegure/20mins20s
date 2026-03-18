@@ -79,7 +79,7 @@
                                 <DropShadowEffect  BlurRadius="10" Direction="0" ShadowDepth="0" Opacity=".2" RenderingBias="Performance" ></DropShadowEffect>
                             </Border.Effect>-->
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" Text="&#xEE93;" VerticalAlignment="Center"  FontSize="14" TextAlignment="Center" Foreground="#37363d"/>
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE787;" VerticalAlignment="Center" FontSize="14" TextAlignment="Center" Foreground="#37363d"/>
                                 
                                 <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Grid.Column="1" Foreground="#37363d" Text="{DynamicResource Lang_Monthly}"/>
                                 

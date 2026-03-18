@@ -21,12 +21,12 @@
                         </Border.Effect>
                         <TextBlock 
                             x:Name="icon"
-                                    FontFamily="/Project1.UI;component/Assets/IconFonts/#Fabric External MDL2 Assets" 
+                                    FontFamily="Segoe MDL2 Assets"
                                     Text="{TemplateBinding ContentStringFormat}"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
                                     FontSize="14"
-                                    Foreground="#9e9ea7"
+                                    Foreground="#CDD6F4"
                             Width="14"
                             Height="14"
                             TextAlignment="Center">
@@ -381,7 +381,7 @@
                             <Button
                                 x:Name="ScrollLeftButton"
                                 Style="{StaticResource ScrollButton}"
-                                Background="White"
+                                Background="#313244"
                                 Visibility="{TemplateBinding ScrollLeftButtonVisibility}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Left"
@@ -391,7 +391,7 @@
                             <Button
                                 x:Name="ScrollRightButton"
                                 Style="{StaticResource ScrollButton}"
-                                Background="White"
+                                Background="#313244"
                                 Visibility="{TemplateBinding ScrollRightButtonVisibility}"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Right"
